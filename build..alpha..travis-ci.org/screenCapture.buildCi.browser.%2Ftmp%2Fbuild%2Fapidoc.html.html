@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://oss.sheetjs.com/js-xls/"
-
-    >xlsjs (v0.7.6)</a>
+    <a href="https://oss.sheetjs.com/js-xls/">xlsjs (v0.7.6)</a>
 </h1>
 <h4>Excel 5.0/95 and 97-2004 spreadsheet (BIFF5 XLS / BIFF8 XLS / XML 2003) parser</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.xlsjs">module xlsjs</a><ol>
 
@@ -1140,7 +1133,7 @@ var mv = check_get_mver(blob);
 mver = mv[0];
 switch(mver) {
 	case 3: ssz = 512; break; case 4: ssz = 4096; break;
-	default: throw &#x22;Major Version: Expected 3 or 4 saw &#x22; + mver;
+	default: throw "Major Version: Expected 3 or 4 saw " + mver;
 }
 
 /* reprocess header */
@@ -1151,38 +1144,38 @@ var header = file.slice(0,ssz);
 check_shifts(blob, mver);
 
 // Number of Directory Sectors
-var nds = blob.read_shift(4, &#x27;i&#x27;);
-if(mver === 3 &#x26;&#x26; nds !== 0) throw &#x27;# Directory Sectors: Expected 0 saw &#x27; + nds;
+var nds = blob.read_shift(4, 'i');
+if(mver === 3 &amp;&amp; nds !== 0) throw '# Directory Sectors: Expected 0 saw ' + nds;
 
 // Number of FAT Sectors
-//var nfs = blob.read_shift(4, &#x27;i&#x27;);
+//var nfs = blob.read_shift(4, 'i');
 blob.l += 4;
 
 // First Directory Sector Location
-dir_start = blob.read_shift(4, &#x27;i&#x27;);
+dir_start = blob.read_shift(4, 'i');
 
 // Transaction Signature
 blob.l += 4;
 
 // Mini Stream Cutoff Size
-blob.chk(&#x27;00100000&#x27;, &#x27;Mini Stream Cutoff Size: &#x27;);
+blob.chk('00100000', 'Mini Stream Cutoff Size: ');
 
 // First Mini FAT Sector Location
-minifat_start = blob.read_shift(4, &#x27;i&#x27;);
+minifat_start = blob.read_shift(4, 'i');
 
 // Number of Mini FAT Sectors
-nmfs = blob.read_shift(4, &#x27;i&#x27;);
+nmfs = blob.read_shift(4, 'i');
 
 // First DIFAT sector location
-difat_start = blob.read_shift(4, &#x27;i&#x27;);
+difat_start = blob.read_shift(4, 'i');
 
 // Number of DIFAT Sectors
-ndfs = blob.read_shift(4, &#x27;i&#x27;);
+ndfs = blob.read_shift(4, 'i');
 
 // Grab FAT Sector Locations
-for(var q, j = 0; j &#x3c; 109; ++j) { /* 109 = (512 - blob.l)&#x3e;&#x3e;&#x3e;2; */
-	q = blob.read_shift(4, &#x27;i&#x27;);
-	if(q&#x3c;0) break;
+for(var q, j = 0; j &lt; 109; ++j) { /* 109 = (512 - blob.l)&gt;&gt;&gt;2; */
+	q = blob.read_shift(4, 'i');
+	if(q&lt;0) break;
 	fat_addrs[j] = q;
 }
 
@@ -1194,9 +1187,9 @@ sleuth_fat(difat_start, ndfs, sectors, ssz, fat_addrs);
 /** Chains */
 var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
 
-sector_list[dir_start].name = &#x22;!Directory&#x22;;
-if(nmfs &#x3e; 0 &#x26;&#x26; minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = &#x22;!MiniFAT&#x22;;
-sector_list[fat_addrs[0]].name = &#x22;!FAT&#x22;;
+sector_list[dir_start].name = "!Directory";
+if(nmfs &gt; 0 &amp;&amp; minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
+sector_list[fat_addrs[0]].name = "!FAT";
 sector_list.fat_addrs = fat_addrs;
 sector_list.ssz = ssz;
 
@@ -1233,10 +1226,10 @@ return {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function readSync(blob, options) {
-	switch(options !== undefined &#x26;&#x26; options.type !== undefined ? options.type : &#x22;base64&#x22;) {
-		case &#x22;file&#x22;: return readFileSync(blob, options);
-		case &#x22;base64&#x22;: return parse(s2a(Base64.decode(blob)), options);
-		case &#x22;binary&#x22;: return parse(s2a(blob), options);
+	switch(options !== undefined &amp;&amp; options.type !== undefined ? options.type : "base64") {
+		case "file": return readFileSync(blob, options);
+		case "base64": return parse(s2a(Base64.decode(blob)), options);
+		case "binary": return parse(s2a(blob), options);
 	}
 	return parse(blob);
 }</pre></li>
@@ -1253,101 +1246,101 @@ return {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function eval_fmt(fmt, v, opts, flen) {
-	var out = [], o = &#x22;&#x22;, i = 0, c = &#x22;&#x22;, lst=&#x27;t&#x27;, q, dt, j, cc;
-	var hr=&#x27;H&#x27;;
+	var out = [], o = "", i = 0, c = "", lst='t', q, dt, j, cc;
+	var hr='H';
 	<span class="apidocCodeCommentSpan">/* Tokenize */
-</span>	while(i &#x3c; fmt.length) {
+</span>	while(i &lt; fmt.length) {
 		switch((c = fmt[i])) {
-			case &#x27;G&#x27;: /* General */
-				if(!isgeneral(fmt, i)) throw new Error(&#x27;unrecognized character &#x27; + c + &#x27; in &#x27; +fmt);
-				out[out.length] = {t:&#x27;G&#x27;, v:&#x27;General&#x27;}; i+=7; break;
-			case &#x27;&#x22;&#x27;: /* Literal text */
-				for(o=&#x22;&#x22;;(cc=fmt.charCodeAt(++i)) !== 34 &#x26;&#x26; i &#x3c; fmt.length;) o += String.fromCharCode(cc);
-				out[out.length] = {t:&#x27;t&#x27;, v:o}; ++i; break;
-			case &#x27;\\&#x27;: var w = fmt[++i], t = (w === &#x22;(&#x22; || w === &#x22;)&#x22;) ? w : &#x27;t&#x27;;
+			case 'G': /* General */
+				if(!isgeneral(fmt, i)) throw new Error('unrecognized character ' + c + ' in ' +fmt);
+				out[out.length] = {t:'G', v:'General'}; i+=7; break;
+			case '"': /* Literal text */
+				for(o="";(cc=fmt.charCodeAt(++i)) !== 34 &amp;&amp; i &lt; fmt.length;) o += String.fromCharCode(cc);
+				out[out.length] = {t:'t', v:o}; ++i; break;
+			case '\\': var w = fmt[++i], t = (w === "(" || w === ")") ? w : 't';
 				out[out.length] = {t:t, v:w}; ++i; break;
-			case &#x27;_&#x27;: out[out.length] = {t:&#x27;t&#x27;, v:&#x22; &#x22;}; i+=2; break;
-			case &#x27;@&#x27;: /* Text Placeholder */
-				out[out.length] = {t:&#x27;T&#x27;, v:v}; ++i; break;
-			case &#x27;B&#x27;: case &#x27;b&#x27;:
-				if(fmt[i+1] === &#x22;1&#x22; || fmt[i+1] === &#x22;2&#x22;) {
-					if(dt==null) { dt=parse_date_code(v, opts, fmt[i+1] === &#x22;2&#x22;); if(dt==null) return &#x22;&#x22;; }
-					out[out.length] = {t:&#x27;X&#x27;, v:fmt.substr(i,2)}; lst = c; i+=2; break;
+			case '_': out[out.length] = {t:'t', v:" "}; i+=2; break;
+			case '@': /* Text Placeholder */
+				out[out.length] = {t:'T', v:v}; ++i; break;
+			case 'B': case 'b':
+				if(fmt[i+1] === "1" || fmt[i+1] === "2") {
+					if(dt==null) { dt=parse_date_code(v, opts, fmt[i+1] === "2"); if(dt==null) return ""; }
+					out[out.length] = {t:'X', v:fmt.substr(i,2)}; lst = c; i+=2; break;
 				}
 				/* falls through */
-			case &#x27;M&#x27;: case &#x27;D&#x27;: case &#x27;Y&#x27;: case &#x27;H&#x27;: case &#x27;S&#x27;: case &#x27;E&#x27;:
+			case 'M': case 'D': case 'Y': case 'H': case 'S': case 'E':
 				c = c.toLowerCase();
 				/* falls through */
-			case &#x27;m&#x27;: case &#x27;d&#x27;: case &#x27;y&#x27;: case &#x27;h&#x27;: case &#x27;s&#x27;: case &#x27;e&#x27;: case &#x27;g&#x27;:
-				if(v &#x3c; 0) return &#x22;&#x22;;
-				if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return &#x22;&#x22;; }
-				o = c; while(++i&#x3c;fmt.length &#x26;&#x26; fmt[i].toLowerCase() === c) o+=c;
-				if(c === &#x27;m&#x27; &#x26;&#x26; lst.toLowerCase() === &#x27;h&#x27;) c = &#x27;M&#x27;; /* m = minute */
-				if(c === &#x27;h&#x27;) c = hr;
+			case 'm': case 'd': case 'y': case 'h': case 's': case 'e': case 'g':
+				if(v &lt; 0) return "";
+				if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return ""; }
+				o = c; while(++i&lt;fmt.length &amp;&amp; fmt[i].toLowerCase() === c) o+=c;
+				if(c === 'm' &amp;&amp; lst.toLowerCase() === 'h') c = 'M'; /* m = minute */
+				if(c === 'h') c = hr;
 				out[out.length] = {t:c, v:o}; lst = c; break;
-			case &#x27;A&#x27;:
-				q={t:c, v:&#x22;A&#x22;};
+			case 'A':
+				q={t:c, v:"A"};
 				if(dt==null) dt=parse_date_code(v, opts);
-				if(fmt.substr(i, 3) === &#x22;A/P&#x22;) { if(dt!=null) q.v = dt.H &#x3e;= 12 ? &#x22;P&#x22; : &#x22;A&#x22;; q.t = &#x27;T&#x27;; hr=&#x27;h&#x27;;i+=3;}
-				else if(fmt.substr(i,5) === &#x22;AM/PM&#x22;) { if(dt!=null) q.v = dt.H &#x3e;= 12 ? &#x22;PM&#x22; : &#x22;AM&#x22;; q.t = &#x27;T&#x27;; i+=5; hr=&#x27;h&#x27;; }
-				else { q.t = &#x22;t&#x22;; ++i; }
-				if(dt==null &#x26;&#x26; q.t === &#x27;T&#x27;) return &#x22;&#x22;;
+				if(fmt.substr(i, 3) === "A/P") { if(dt!=null) q.v = dt.H &gt;= 12 ? "P" : "A"; q.t = 'T'; hr='h';i+=3;}
+				else if(fmt.substr(i,5) === "AM/PM") { if(dt!=null) q.v = dt.H &gt;= 12 ? "PM" : "AM"; q.t = 'T'; i+=5; hr='h'; }
+				else { q.t = "t"; ++i; }
+				if(dt==null &amp;&amp; q.t === 'T') return "";
 				out[out.length] = q; lst = c; break;
-			case &#x27;[&#x27;:
+			case '[':
 				o = c;
-				while(fmt[i++] !== &#x27;]&#x27; &#x26;&#x26; i &#x3c; fmt.length) o += fmt[i];
-				if(o.substr(-1) !== &#x27;]&#x27;) throw &#x27;unterminated &#x22;[&#x22; block: |&#x27; + o + &#x27;|&#x27;;
+				while(fmt[i++] !== ']' &amp;&amp; i &lt; fmt.length) o += fmt[i];
+				if(o.substr(-1) !== ']') throw 'unterminated "[" block: |' + o + '|';
 				if(o.match(abstime)) {
-					if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return &#x22;&#x22;; }
-					out[out.length] = {t:&#x27;Z&#x27;, v:o.toLowerCase()};
-				} else { o=&#x22;&#x22;; }
+					if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return ""; }
+					out[out.length] = {t:'Z', v:o.toLowerCase()};
+				} else { o=""; }
 				break;
 			/* Numbers */
-			case &#x27;.&#x27;:
+			case '.':
 				if(dt != null) {
-					o = c; while((c=fmt[++i]) === &#x22;0&#x22;) o += c;
-					out[out.length] = {t:&#x27;s&#x27;, v:o}; break;
+					o = c; while((c=fmt[++i]) === "0") o += c;
+					out[out.length] = {t:'s', v:o}; break;
 				}
 				/* falls through */
-			case &#x27;0&#x27;: case &#x27;#&#x27;:
-				o = c; while(&#x22;0#?.,E+-%&#x22;.indexOf(c=fmt[++i]) &#x3e; -1 || c==&#x27;\\&#x27; &#x26;&#x26; fmt[i+1] == &#x22;-&#x22; &#x26;&#x26; &#x22;0#&#x22;.indexOf(fmt[i+2])&#x3e;-1) o += c;
-				out[out.length] = {t:&#x27;n&#x27;, v:o}; break;
-			case &#x27;?&#x27;:
+			case '0': case '#':
+				o = c; while("0#?.,E+-%".indexOf(c=fmt[++i]) &gt; -1 || c=='\\' &amp;&amp; fmt[i+1] == "-" &amp;&amp; "0#".indexOf(fmt[i+2])&gt;-1) o += c;
+				out[out.length] = {t:'n', v:o}; break;
+			case '?':
 				o = c; while(fmt[++i] === c) o+=c;
 				q={t:c, v:o}; out[out.length] = q; lst = c; break;
-			case &#x27;*&#x27;: ++i; if(fmt[i] == &#x27; &#x27; || fmt[i] == &#x27;*&#x27;) ++i; break; // **
-			case &#x27;(&#x27;: case &#x27;)&#x27;: out[out.length] = {t:(flen===1?&#x27;t&#x27;:c), v:c}; ++i; break;
-			case &#x27;1&#x27;: case &#x27;2&#x27;: case &#x27;3&#x27;: case &#x27;4&#x27;: case &#x27;5&#x27;: case &#x27;6&#x27;: case &#x27;7&#x27;: case &#x27;8&#x27;: case &#x27;9&#x27;:
-				o = c; while(&#x22;0123456789&#x22;.indexOf(fmt[++i]) &#x3e; -1) o+=fmt[i];
-				out[out.length] = {t:&#x27;D&#x27;, v:o}; break;
-			case &#x27; &#x27;: out[out.length] = {t:c, v:c}; ++i; break;
+			case '*': ++i; if(fmt[i] == ' ' || fmt[i] == '*') ++i; break; // **
+			case '(': case ')': out[out.length] = {t:(flen===1?'t':c), v:c}; ++i; break;
+			case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+				o = c; while("0123456789".indexOf(fmt[++i]) &gt; -1) o+=fmt[i];
+				out[out.length] = {t:'D', v:o}; break;
+			case ' ': out[out.length] = {t:c, v:c}; ++i; break;
 			default:
-				if(&#x22;,$-+/():!^&#x26;&#x27;~{}&#x3c;&#x3e;=€acfijklopqrtuvwxz&#x22;.indexOf(c) === -1) throw new Error(&#x27;unrecognized character &#x27; + c + &#x27; in &#x27; + fmt);
-				out[out.length] = {t:&#x27;t&#x27;, v:c}; ++i; break;
+				if(",$-+/():!^&amp;'~{}&lt;&gt;=â‚¬acfijklopqrtuvwxz".indexOf(c) === -1) throw new Error('unrecognized character ' + c + ' in ' + fmt);
+				out[out.length] = {t:'t', v:c}; ++i; break;
 		}
 	}
 	var bt = 0, ss0 = 0, ssm;
-	for(i=out.length-1, lst=&#x27;t&#x27;; i &#x3e;= 0; --i) {
+	for(i=out.length-1, lst='t'; i &gt;= 0; --i) {
 		switch(out[i].t) {
-			case &#x27;h&#x27;: case &#x27;H&#x27;: out[i].t = hr; lst=&#x27;h&#x27;; if(bt &#x3c; 1) bt = 1; break;
-			case &#x27;s&#x27;:
+			case 'h': case 'H': out[i].t = hr; lst='h'; if(bt &lt; 1) bt = 1; break;
+			case 's':
 				if((ssm=out[i].v.match(/\.0+$/))) ss0=Math.max(ss0,ssm[0].length-1);
-				if(bt &#x3c; 3) bt = 3;
+				if(bt &lt; 3) bt = 3;
 			/* falls through */
-			case &#x27;d&#x27;: case &#x27;y&#x27;: case &#x27;M&#x27;: case &#x27;e&#x27;: lst=out[i].t; break;
-			case &#x27;m&#x27;: if(lst === &#x27;s&#x27;) { out[i].t = &#x27;M&#x27;; if(bt &#x3c; 2) bt = 2; } break;
-			case &#x27;X&#x27;: if(out[i].v === &#x22;B2&#x22;);
+			case 'd': case 'y': case 'M': case 'e': lst=out[i].t; break;
+			case 'm': if(lst === 's') { out[i].t = 'M'; if(bt &lt; 2) bt = 2; } break;
+			case 'X': if(out[i].v === "B2");
 				break;
-			case &#x27;Z&#x27;:
-				if(bt &#x3c; 1 &#x26;&#x26; out[i].v.match(/[Hh]/)) bt = 1;
-				if(bt &#x3c; 2 &#x26;&#x26; out[i].v.match(/[Mm]/)) bt = 2;
-				if(bt &#x3c; 3 &#x26;&#x26; out[i].v.match(/[Ss]/)) bt = 3;
+			case 'Z':
+				if(bt &lt; 1 &amp;&amp; out[i].v.match(/[Hh]/)) bt = 1;
+				if(bt &lt; 2 &amp;&amp; out[i].v.match(/[Mm]/)) bt = 2;
+				if(bt &lt; 3 &amp;&amp; out[i].v.match(/[Ss]/)) bt = 3;
 		}
 	}
 	switch(bt) {
 		case 0: break;
 		case 1:
-			if(dt.u &#x3e;= 0.5) { d ...</pre></li>
+			if(dt.u &gt;= 0.5) { d ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -1362,11 +1355,11 @@ return {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function general_fmt(v, opts) {
 	switch(typeof v) {
-		case &#x27;string&#x27;: return v;
-		case &#x27;boolean&#x27;: return v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-		case &#x27;number&#x27;: return (v|0) === v ? general_fmt_int(v, opts) : general_fmt_num(v, opts);
+		case 'string': return v;
+		case 'boolean': return v ? "TRUE" : "FALSE";
+		case 'number': return (v|0) === v ? general_fmt_int(v, opts) : general_fmt_num(v, opts);
 	}
-	throw new Error(&#x22;unsupported value in General format: &#x22; + v);
+	throw new Error("unsupported value in General format: " + v);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -1380,7 +1373,7 @@ return {
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function general_fmt_int(v, opts) { return &#x22;&#x22;+v; }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function general_fmt_int(v, opts) { return ""+v; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -1395,8 +1388,8 @@ return {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function general_fmt_num(v, opts) {
 	var V = Math.floor(Math.log(Math.abs(v))*Math.LOG10E), o;
-	if(V &#x3e;= -4 &#x26;&#x26; V &#x3c;= -1) o = v.toPrecision(10+V);
-	else if(Math.abs(V) &#x3c;= 9) o = gfn2(v);
+	if(V &gt;= -4 &amp;&amp; V &lt;= -1) o = v.toPrecision(10+V);
+	else if(Math.abs(V) &lt;= 9) o = gfn2(v);
 	else if(V === 10) o = v.toFixed(10).substr(0,12);
 	else o = gfn3(v);
 	return gfn5(gfn4(o));
@@ -1416,17 +1409,17 @@ return {
     <li>description and source-code<pre class="apidocCodePre">function split_fmt(fmt) {
 	var out = [];
 	var in_str = false, cc;
-	for(var i = 0, j = 0; i &#x3c; fmt.length; ++i) switch((cc=fmt.charCodeAt(i))) {
-		case 34:<span class="apidocCodeCommentSpan"> /* &#x27;&#x22;&#x27; */
+	for(var i = 0, j = 0; i &lt; fmt.length; ++i) switch((cc=fmt.charCodeAt(i))) {
+		case 34:<span class="apidocCodeCommentSpan"> /* '"' */
 </span>			in_str = !in_str; break;
-		case 95: case 42: case 92: /* &#x27;_&#x27; &#x27;*&#x27; &#x27;\\&#x27; */
+		case 95: case 42: case 92: /* '_' '*' '\\' */
 			++i; break;
-		case 59: /* &#x27;;&#x27; */
+		case 59: /* ';' */
 			out[out.length] = fmt.substr(j,i-j);
 			j = i+1;
 	}
 	out[out.length] = fmt.substr(j);
-	if(in_str === true) throw new Error(&#x22;Format |&#x22; + fmt + &#x22;| unterminated string &#x22;);
+	if(in_str === true) throw new Error("Format |" + fmt + "| unterminated string ");
 	return out;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -1443,16 +1436,16 @@ return {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function format(fmt, v, o) {
 	fixopts(o != null ? o : (o=[]));
-	var sfmt = &#x22;&#x22;;
+	var sfmt = "";
 	switch(typeof fmt) {
-		case &#x22;string&#x22;: sfmt = fmt; break;
-		case &#x22;number&#x22;: sfmt = (o.table != null ? o.table : table_fmt)[fmt]; break;
+		case "string": sfmt = fmt; break;
+		case "number": sfmt = (o.table != null ? o.table : table_fmt)[fmt]; break;
 	}
 	if(isgeneral(sfmt,0)) return general_fmt(v, o);
 	var f = choose_fmt(sfmt, v);
 	if(isgeneral(f[1])) return general_fmt(v, o);
-	if(v === true) v = &#x22;TRUE&#x22;; else if(v === false) v = &#x22;FALSE&#x22;;
-	else if(v === &#x22;&#x22; || v == null) return &#x22;&#x22;;
+	if(v === true) v = "TRUE"; else if(v === false) v = "FALSE";
+	else if(v === "" || v == null) return "";
 	return eval_fmt(f[1], v, o, f[0]);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -1507,27 +1500,27 @@ return {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function parse_date_code(v, opts, b2) {
-	if(v &#x3e; 2958465 || v &#x3c; 0) return null;
+	if(v &gt; 2958465 || v &lt; 0) return null;
 	var date = (v|0), time = Math.floor(86400 * (v - date)), dow=0;
 	var dout=[];
 	var out={D:date, T:time, u:86400*(v-date)-time,y:0,m:0,d:0,H:0,M:0,S:0,q:0};
-	if(Math.abs(out.u) &#x3c; 1e-6) out.u = 0;
+	if(Math.abs(out.u) &lt; 1e-6) out.u = 0;
 	fixopts(opts != null ? opts : (opts=[]));
 	if(opts.date1904) date += 1462;
-	if(out.u &#x3e; 0.999) {
+	if(out.u &gt; 0.999) {
 		out.u = 0;
 		if(++time == 86400) { time = 0; ++date; }
 	}
 	if(date === 60) {dout = b2 ? [1317,10,29] : [1900,2,29]; dow=3;}
 	else if(date === 0) {dout = b2 ? [1317,8,29] : [1900,1,0]; dow=6;}
 	else {
-		if(date &#x3e; 60) --date;
+		if(date &gt; 60) --date;
 		<span class="apidocCodeCommentSpan">/* 1 = Jan 1 1900 */
 </span>		var d = new Date(1900,0,1);
 		d.setDate(d.getDate() + date - 1);
 		dout = [d.getFullYear(), d.getMonth()+1,d.getDate()];
 		dow = d.getDay();
-		if(date &#x3c; 60) dow = (dow + 6) % 7;
+		if(date &lt; 60) dow = (dow + 6) % 7;
 		if(b2) dow = fix_hijri(d, dout);
 	}
 	out.y = dout[0]; out.m = dout[1]; out.d = dout[2];
@@ -1555,22 +1548,22 @@ fix_read_opts(options);
 reset_cp();
 var CompObj, Summary, Workbook;
 if(cfb.FullPaths) {
-	CompObj = cfb.find(&#x27;!CompObj&#x27;);
-	Summary = cfb.find(&#x27;!SummaryInformation&#x27;);
-	Workbook = cfb.find(&#x27;/Workbook&#x27;);
+	CompObj = cfb.find('!CompObj');
+	Summary = cfb.find('!SummaryInformation');
+	Workbook = cfb.find('/Workbook');
 } else {
 	prep_blob(cfb, 0);
 	Workbook = ({content: cfb});
 }
 
-if(!Workbook) Workbook = cfb.find(&#x27;/Book&#x27;);
+if(!Workbook) Workbook = cfb.find('/Book');
 var CompObjP, SummaryP, WorkbookP;
 
 if(CompObj) CompObjP = parse_compobj(CompObj);
-if(options.bookProps &#x26;&#x26; !options.bookSheets) WorkbookP = {};
+if(options.bookProps &amp;&amp; !options.bookSheets) WorkbookP = {};
 else {
 	if(Workbook) WorkbookP = parse_workbook(Workbook.content, options, !!Workbook.find);
-	else throw new Error(&#x22;Cannot find Workbook stream&#x22;);
+	else throw new Error("Cannot find Workbook stream");
 }
 
 if(cfb.FullPaths) parse_props(cfb);
@@ -1598,13 +1591,13 @@ return WorkbookP;
     <li>description and source-code<pre class="apidocCodePre">function xlsread(f, o) {
 	var n=0;
 	if(!o) o = {};
-	if(!o.type) o.type = (has_buf &#x26;&#x26; Buffer.isBuffer(f)) ? &#x22;buffer&#x22; : &#x22;base64&#x22;;
+	if(!o.type) o.type = (has_buf &amp;&amp; Buffer.isBuffer(f)) ? "buffer" : "base64";
 	switch((n = firstbyte(f, o))) {
 		case 0xD0: return parse_xlscfb(CFB.read(f, o), o);
-		case 0x09: return parse_xlscfb(s2a(o.type === &#x27;base64&#x27; ? Base64.decode(f) : f), o);
+		case 0x09: return parse_xlscfb(s2a(o.type === 'base64' ? Base64.decode(f) : f), o);
 		case 0x3C: return parse_xlml(f, o);
 		case 0xEF: return parse_xlml(f, o);
-		default: throw new Error(&#x22;Unsupported file &#x22; + n);
+		default: throw new Error("Unsupported file " + n);
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -1612,10 +1605,10 @@ return WorkbookP;
   var data = new Uint8Array(arraybuffer);
   var arr = new Array();
   for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-  var bstr = arr.join(&#x22;&#x22;);
+  var bstr = arr.join("");
 
   /* Call XLS */
-  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:&#x22;binary&#x22;});
+  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:"binary"});
 
   /* DO SOMETHING WITH workbook HERE */
 }
@@ -1637,12 +1630,12 @@ oReq.send();
     <li>description and source-code<pre class="apidocCodePre">readFile = function (f, o) {
 	var d = fs.readFileSync(f);
 	if(!o) o = {};
-	switch(firstbyte(d, {type:&#x27;buffer&#x27;})) {
-		case 0xD0: return parse_xlscfb(CFB.read(d,{type:&#x27;buffer&#x27;}),o);
+	switch(firstbyte(d, {type:'buffer'})) {
+		case 0xD0: return parse_xlscfb(CFB.read(d,{type:'buffer'}),o);
 		case 0x09: return parse_xlscfb(d, o);
-		case 0x3C: return parse_xlml(d, (o.type=&#x22;buffer&#x22;,o));
-		case 0xEF: return parse_xlml(d, (o.type=&#x22;buffer&#x22;,o));
-		default: throw &#x22;Unsupported file&#x22;;
+		case 0x3C: return parse_xlml(d, (o.type="buffer",o));
+		case 0xEF: return parse_xlml(d, (o.type="buffer",o));
+		default: throw "Unsupported file";
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -1652,13 +1645,13 @@ data and feeding it into the library.  Here are a few common scenarios:
 - node readFile:
 
 ```js
-if(typeof require !== &#x27;undefined&#x27;) XLS = require(&#x27;xlsjs&#x27;);
-var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;test.xls&#x27;);
+if(typeof require !== 'undefined') XLS = require('xlsjs');
+var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>('test.xls');
 /* DO SOMETHING WITH workbook HERE */
 ```
 
 - ajax (for a more complete example that works in older browsers, check the demo
-  at &#x3c;http://oss.sheetjs.com/js-xls/ajax.html&#x3e;):
+  at &lt;http://oss.sheetjs.com/js-xls/ajax.html&gt;):
 
 ```js
 ...</pre></li>
@@ -1676,12 +1669,12 @@ var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;tes
     <li>description and source-code<pre class="apidocCodePre">readFileSync = function (f, o) {
 	var d = fs.readFileSync(f);
 	if(!o) o = {};
-	switch(firstbyte(d, {type:&#x27;buffer&#x27;})) {
-		case 0xD0: return parse_xlscfb(CFB.read(d,{type:&#x27;buffer&#x27;}),o);
+	switch(firstbyte(d, {type:'buffer'})) {
+		case 0xD0: return parse_xlscfb(CFB.read(d,{type:'buffer'}),o);
 		case 0x09: return parse_xlscfb(d, o);
-		case 0x3C: return parse_xlml(d, (o.type=&#x22;buffer&#x22;,o));
-		case 0xEF: return parse_xlml(d, (o.type=&#x22;buffer&#x22;,o));
-		default: throw &#x22;Unsupported file&#x22;;
+		case 0x3C: return parse_xlml(d, (o.type="buffer",o));
+		case 0xEF: return parse_xlml(d, (o.type="buffer",o));
+		default: throw "Unsupported file";
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -1699,13 +1692,13 @@ var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;tes
     <li>description and source-code<pre class="apidocCodePre">function xlsread(f, o) {
 	var n=0;
 	if(!o) o = {};
-	if(!o.type) o.type = (has_buf &#x26;&#x26; Buffer.isBuffer(f)) ? &#x22;buffer&#x22; : &#x22;base64&#x22;;
+	if(!o.type) o.type = (has_buf &amp;&amp; Buffer.isBuffer(f)) ? "buffer" : "base64";
 	switch((n = firstbyte(f, o))) {
 		case 0xD0: return parse_xlscfb(CFB.read(f, o), o);
-		case 0x09: return parse_xlscfb(s2a(o.type === &#x27;base64&#x27; ? Base64.decode(f) : f), o);
+		case 0x09: return parse_xlscfb(s2a(o.type === 'base64' ? Base64.decode(f) : f), o);
 		case 0x3C: return parse_xlml(f, o);
 		case 0xEF: return parse_xlml(f, o);
-		default: throw new Error(&#x22;Unsupported file &#x22; + n);
+		default: throw new Error("Unsupported file " + n);
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -1747,7 +1740,7 @@ var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;tes
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function decode_range(range) { var x =range.split(&#x22;:&#x22;).map(decode_cell); return {s:x[0],e:x[x.length-1]}; }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function decode_range(range) { var x =range.split(":").map(decode_cell); return {s:x[0],e:x[x.length-1]}; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -1786,7 +1779,7 @@ var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;tes
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function encode_col(col) { var s=&#x22;&#x22;; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s;
+    <li>description and source-code<pre class="apidocCodePre">function encode_col(col) { var s=""; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s;
 return s; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -1801,9 +1794,9 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function encode_range(cs, ce) {
-	if(ce === undefined || typeof ce === &#x27;number&#x27;) return encode_range(cs.s, cs.e);
-	if(typeof cs !== &#x27;string&#x27;) cs = encode_cell(cs); if(typeof ce !== &#x27;string&#x27;) ce = encode_cell(ce);
-	return cs == ce ? cs : cs + &#x22;:&#x22; + ce;
+	if(ce === undefined || typeof ce === 'number') return encode_range(cs.s, cs.e);
+	if(typeof cs !== 'string') cs = encode_cell(cs); if(typeof ce !== 'string') ce = encode_cell(ce);
+	return cs == ce ? cs : cs + ":" + ce;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -1817,7 +1810,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function encode_row(row) { return &#x22;&#x22; + (row + 1); }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function encode_row(row) { return "" + (row + 1); }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -1831,7 +1824,7 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function format_cell(cell, v) {
-	if(cell == null || cell.t == null) return &#x22;&#x22;;
+	if(cell == null || cell.t == null) return "";
 	if(cell.w !== undefined) return cell.w;
 	if(v === undefined) return safe_format_cell(cell, cell.v);
 	return safe_format_cell(cell, v);
@@ -1849,33 +1842,33 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_formulae(sheet) {
-	var y = &#x22;&#x22;, x, val=&#x22;&#x22;;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	var r = safe_decode_range(sheet[&#x27;!ref&#x27;]), rr = &#x22;&#x22;, cols = [], C;
+	var y = "", x, val="";
+	if(sheet == null || sheet["!ref"] == null) return [];
+	var r = safe_decode_range(sheet['!ref']), rr = "", cols = [], C;
 	var cmds = new Array((r.e.r-r.s.r+1)*(r.e.c-r.s.c+1));
 	var i = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(var R = r.s.r; R &#x3c;= r.e.r; ++R) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(var R = r.s.r; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			y = cols[C] + rr;
 			x = sheet[y];
-			val = &#x22;&#x22;;
+			val = "";
 			if(x === undefined) continue;
 			else if(x.F != null) {
 				y = x.F;
 				if(!x.f) continue;
 				val = x.f;
-				if(y.indexOf(&#x22;:&#x22;) == -1) y = y + &#x22;:&#x22; + y;
+				if(y.indexOf(":") == -1) y = y + ":" + y;
 			}
 			if(x.f != null) val = x.f;
-			else if(x.t == &#x27;n&#x27; &#x26;&#x26; x.v != null) val = &#x22;&#x22; + x.v;
-			else if(x.t == &#x27;b&#x27;) val = x.v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-			else if(x.w !== undefined) val = &#x22;&#x27;&#x22; + x.w;
+			else if(x.t == 'n' &amp;&amp; x.v != null) val = "" + x.v;
+			else if(x.t == 'b') val = x.v ? "TRUE" : "FALSE";
+			else if(x.w !== undefined) val = "'" + x.w;
 			else if(x.v === undefined) continue;
-			else if(x.t == &#x27;s&#x27;) val = &#x22;&#x27;&#x22; + x.v;
-			else val = &#x22;&#x22;+x.v;
-			cmds[i++] = y + &#x22;=&#x22; + val;
+			else if(x.t == 's') val = "'" + x.v;
+			else val = ""+x.v;
+			cmds[i++] = y + "=" + val;
 		}
 	}
 	cmds.length = i;
@@ -1894,25 +1887,25 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_csv(sheet, opts) {
-	var out = &#x22;&#x22;, txt = &#x22;&#x22;, qreg = /&#x22;/g;
+	var out = "", txt = "", qreg = /"/g;
 	var o = opts == null ? {} : opts;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return &#x22;&#x22;;
-	var r = safe_decode_range(sheet[&#x22;!ref&#x22;]);
-	var FS = o.FS !== undefined ? o.FS : &#x22;,&#x22;, fs = FS.charCodeAt(0);
-	var RS = o.RS !== undefined ? o.RS : &#x22;\n&#x22;, rs = RS.charCodeAt(0);
-	var row = &#x22;&#x22;, rr = &#x22;&#x22;, cols = [];
+	if(sheet == null || sheet["!ref"] == null) return "";
+	var r = safe_decode_range(sheet["!ref"]);
+	var FS = o.FS !== undefined ? o.FS : ",", fs = FS.charCodeAt(0);
+	var RS = o.RS !== undefined ? o.RS : "\n", rs = RS.charCodeAt(0);
+	var row = "", rr = "", cols = [];
 	var i = 0, cc = 0, val;
 	var R = 0, C = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(R = r.s.r; R &#x3c;= r.e.r; ++R) {
-		row = &#x22;&#x22;;
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(R = r.s.r; R &lt;= r.e.r; ++R) {
+		row = "";
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
-			txt = val !== undefined ? &#x27;&#x27;+format_cell(val) : &#x22;&#x22;;
+			txt = val !== undefined ? ''+format_cell(val) : "";
 			for(i = 0, cc = 0; i !== txt.length; ++i) if((cc = txt.charCodeAt(i)) === fs || cc === rs || cc === 34) {
-				txt = &#x22;\&#x22;&#x22; + txt.replace(qreg, &#x27;&#x22;&#x22;&#x27;) + &#x22;\&#x22;&#x22;; break; }
-			row += (C === r.s.c ? &#x22;&#x22; : FS) + txt;
+				txt = "\"" + txt.replace(qreg, '""') + "\""; break; }
+			row += (C === r.s.c ? "" : FS) + txt;
 		}
 		out += row + RS;
 	}
@@ -1934,22 +1927,22 @@ return s; }</pre></li>
 	var val, row, range, header = 0, offset = 1, r, hdr = [], isempty, R, C, v;
 	var o = opts != null ? opts : {};
 	var raw = o.raw;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	range = o.range !== undefined ? o.range : sheet[&#x22;!ref&#x22;];
+	if(sheet == null || sheet["!ref"] == null) return [];
+	range = o.range !== undefined ? o.range : sheet["!ref"];
 	if(o.header === 1) header = 1;
-	else if(o.header === &#x22;A&#x22;) header = 2;
+	else if(o.header === "A") header = 2;
 	else if(Array.isArray(o.header)) header = 3;
 	switch(typeof range) {
-		case &#x27;string&#x27;: r = safe_decode_range(range); break;
-		case &#x27;number&#x27;: r = safe_decode_range(sheet[&#x22;!ref&#x22;]); r.s.r = range; break;
+		case 'string': r = safe_decode_range(range); break;
+		case 'number': r = safe_decode_range(sheet["!ref"]); r.s.r = range; break;
 		default: r = range;
 	}
-	if(header &#x3e; 0) offset = 0;
+	if(header &gt; 0) offset = 0;
 	var rr = encode_row(r.s.r);
 	var cols = new Array(r.e.c-r.s.c+1);
 	var out = new Array(r.e.r-r.s.r-offset+1);
 	var outi = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) {
 		cols[C] = encode_col(C);
 		val = sheet[cols[C] + rr];
 		switch(header) {
@@ -1962,24 +1955,24 @@ return s; }</pre></li>
 		}
 	}
 
-	for (R = r.s.r + offset; R &#x3c;= r.e.r; ++R) {
+	for (R = r.s.r + offset; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
 		isempty = true;
 		if(header === 1) row = [];
 		else {
 			row = {};
-			if(Object.defineProperty) Object.defineProperty(row, &#x27;__rowNum__&#x27;, {value:R, enumerable:false});
+			if(Object.defineProperty) Object.defineProperty(row, '__rowNum__', {value:R, enumerable:false});
 			else row.__rowNum__ = R;
 		}
-		for (C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for (C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
 			if(val === undefined || val.t === undefined) continue;
 			v = val.v;
 			switch(val.t){
-				case &#x27;e&#x27;: continue;
-				case &#x27;s&#x27;: break;
-				case &#x27;b&#x27;: case &#x27;n&#x27;: break;
-				default: throw &#x27;unrecognized type &#x27; + val.t;
+				case 'e': continue;
+				case 's': break;
+				case 'b': case 'n': break;
+				default: throw 'unrecognized type ' + val.t;
 			}
 			if(v !== undefined) {
 				row[hdr[C]] = raw ? v : format_cell(val,v);
@@ -2016,7 +2009,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function split_cell(cstr) { return cstr.replace(/(\$?[A-Z]*)(\$?\d*)/,&#x22;$1,$2&#x22;).split(&#x22;,&#x22;); }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function split_cell(cstr) { return cstr.replace(/(\$?[A-Z]*)(\$?\d*)/,"$1,$2").split(","); }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -2064,7 +2057,7 @@ var mv = check_get_mver(blob);
 mver = mv[0];
 switch(mver) {
 	case 3: ssz = 512; break; case 4: ssz = 4096; break;
-	default: throw &#x22;Major Version: Expected 3 or 4 saw &#x22; + mver;
+	default: throw "Major Version: Expected 3 or 4 saw " + mver;
 }
 
 /* reprocess header */
@@ -2075,38 +2068,38 @@ var header = file.slice(0,ssz);
 check_shifts(blob, mver);
 
 // Number of Directory Sectors
-var nds = blob.read_shift(4, &#x27;i&#x27;);
-if(mver === 3 &#x26;&#x26; nds !== 0) throw &#x27;# Directory Sectors: Expected 0 saw &#x27; + nds;
+var nds = blob.read_shift(4, 'i');
+if(mver === 3 &amp;&amp; nds !== 0) throw '# Directory Sectors: Expected 0 saw ' + nds;
 
 // Number of FAT Sectors
-//var nfs = blob.read_shift(4, &#x27;i&#x27;);
+//var nfs = blob.read_shift(4, 'i');
 blob.l += 4;
 
 // First Directory Sector Location
-dir_start = blob.read_shift(4, &#x27;i&#x27;);
+dir_start = blob.read_shift(4, 'i');
 
 // Transaction Signature
 blob.l += 4;
 
 // Mini Stream Cutoff Size
-blob.chk(&#x27;00100000&#x27;, &#x27;Mini Stream Cutoff Size: &#x27;);
+blob.chk('00100000', 'Mini Stream Cutoff Size: ');
 
 // First Mini FAT Sector Location
-minifat_start = blob.read_shift(4, &#x27;i&#x27;);
+minifat_start = blob.read_shift(4, 'i');
 
 // Number of Mini FAT Sectors
-nmfs = blob.read_shift(4, &#x27;i&#x27;);
+nmfs = blob.read_shift(4, 'i');
 
 // First DIFAT sector location
-difat_start = blob.read_shift(4, &#x27;i&#x27;);
+difat_start = blob.read_shift(4, 'i');
 
 // Number of DIFAT Sectors
-ndfs = blob.read_shift(4, &#x27;i&#x27;);
+ndfs = blob.read_shift(4, 'i');
 
 // Grab FAT Sector Locations
-for(var q, j = 0; j &#x3c; 109; ++j) { /* 109 = (512 - blob.l)&#x3e;&#x3e;&#x3e;2; */
-	q = blob.read_shift(4, &#x27;i&#x27;);
-	if(q&#x3c;0) break;
+for(var q, j = 0; j &lt; 109; ++j) { /* 109 = (512 - blob.l)&gt;&gt;&gt;2; */
+	q = blob.read_shift(4, 'i');
+	if(q&lt;0) break;
 	fat_addrs[j] = q;
 }
 
@@ -2118,9 +2111,9 @@ sleuth_fat(difat_start, ndfs, sectors, ssz, fat_addrs);
 /** Chains */
 var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
 
-sector_list[dir_start].name = &#x22;!Directory&#x22;;
-if(nmfs &#x3e; 0 &#x26;&#x26; minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = &#x22;!MiniFAT&#x22;;
-sector_list[fat_addrs[0]].name = &#x22;!FAT&#x22;;
+sector_list[dir_start].name = "!Directory";
+if(nmfs &gt; 0 &amp;&amp; minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
+sector_list[fat_addrs[0]].name = "!FAT";
 sector_list.fat_addrs = fat_addrs;
 sector_list.ssz = ssz;
 
@@ -2157,10 +2150,10 @@ return {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function readSync(blob, options) {
-	switch(options !== undefined &#x26;&#x26; options.type !== undefined ? options.type : &#x22;base64&#x22;) {
-		case &#x22;file&#x22;: return readFileSync(blob, options);
-		case &#x22;base64&#x22;: return parse(s2a(Base64.decode(blob)), options);
-		case &#x22;binary&#x22;: return parse(s2a(blob), options);
+	switch(options !== undefined &amp;&amp; options.type !== undefined ? options.type : "base64") {
+		case "file": return readFileSync(blob, options);
+		case "base64": return parse(s2a(Base64.decode(blob)), options);
+		case "binary": return parse(s2a(blob), options);
 	}
 	return parse(blob);
 }</pre></li>
@@ -2169,10 +2162,10 @@ return {
   var data = new Uint8Array(arraybuffer);
   var arr = new Array();
   for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-  var bstr = arr.join(&#x22;&#x22;);
+  var bstr = arr.join("");
 
   /* Call XLS */
-  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:&#x22;binary&#x22;});
+  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:"binary"});
 
   /* DO SOMETHING WITH workbook HERE */
 }
@@ -2220,7 +2213,7 @@ var mv = check_get_mver(blob);
 mver = mv[0];
 switch(mver) {
 	case 3: ssz = 512; break; case 4: ssz = 4096; break;
-	default: throw &#x22;Major Version: Expected 3 or 4 saw &#x22; + mver;
+	default: throw "Major Version: Expected 3 or 4 saw " + mver;
 }
 
 /* reprocess header */
@@ -2231,38 +2224,38 @@ var header = file.slice(0,ssz);
 check_shifts(blob, mver);
 
 // Number of Directory Sectors
-var nds = blob.read_shift(4, &#x27;i&#x27;);
-if(mver === 3 &#x26;&#x26; nds !== 0) throw &#x27;# Directory Sectors: Expected 0 saw &#x27; + nds;
+var nds = blob.read_shift(4, 'i');
+if(mver === 3 &amp;&amp; nds !== 0) throw '# Directory Sectors: Expected 0 saw ' + nds;
 
 // Number of FAT Sectors
-//var nfs = blob.read_shift(4, &#x27;i&#x27;);
+//var nfs = blob.read_shift(4, 'i');
 blob.l += 4;
 
 // First Directory Sector Location
-dir_start = blob.read_shift(4, &#x27;i&#x27;);
+dir_start = blob.read_shift(4, 'i');
 
 // Transaction Signature
 blob.l += 4;
 
 // Mini Stream Cutoff Size
-blob.chk(&#x27;00100000&#x27;, &#x27;Mini Stream Cutoff Size: &#x27;);
+blob.chk('00100000', 'Mini Stream Cutoff Size: ');
 
 // First Mini FAT Sector Location
-minifat_start = blob.read_shift(4, &#x27;i&#x27;);
+minifat_start = blob.read_shift(4, 'i');
 
 // Number of Mini FAT Sectors
-nmfs = blob.read_shift(4, &#x27;i&#x27;);
+nmfs = blob.read_shift(4, 'i');
 
 // First DIFAT sector location
-difat_start = blob.read_shift(4, &#x27;i&#x27;);
+difat_start = blob.read_shift(4, 'i');
 
 // Number of DIFAT Sectors
-ndfs = blob.read_shift(4, &#x27;i&#x27;);
+ndfs = blob.read_shift(4, 'i');
 
 // Grab FAT Sector Locations
-for(var q, j = 0; j &#x3c; 109; ++j) { /* 109 = (512 - blob.l)&#x3e;&#x3e;&#x3e;2; */
-	q = blob.read_shift(4, &#x27;i&#x27;);
-	if(q&#x3c;0) break;
+for(var q, j = 0; j &lt; 109; ++j) { /* 109 = (512 - blob.l)&gt;&gt;&gt;2; */
+	q = blob.read_shift(4, 'i');
+	if(q&lt;0) break;
 	fat_addrs[j] = q;
 }
 
@@ -2274,9 +2267,9 @@ sleuth_fat(difat_start, ndfs, sectors, ssz, fat_addrs);
 /** Chains */
 var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
 
-sector_list[dir_start].name = &#x22;!Directory&#x22;;
-if(nmfs &#x3e; 0 &#x26;&#x26; minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = &#x22;!MiniFAT&#x22;;
-sector_list[fat_addrs[0]].name = &#x22;!FAT&#x22;;
+sector_list[dir_start].name = "!Directory";
+if(nmfs &gt; 0 &amp;&amp; minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
+sector_list[fat_addrs[0]].name = "!FAT";
 sector_list.fat_addrs = fat_addrs;
 sector_list.ssz = ssz;
 
@@ -2318,10 +2311,10 @@ return {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function readSync(blob, options) {
-	switch(options !== undefined &#x26;&#x26; options.type !== undefined ? options.type : &#x22;base64&#x22;) {
-		case &#x22;file&#x22;: return readFileSync(blob, options);
-		case &#x22;base64&#x22;: return parse(s2a(Base64.decode(blob)), options);
-		case &#x22;binary&#x22;: return parse(s2a(blob), options);
+	switch(options !== undefined &amp;&amp; options.type !== undefined ? options.type : "base64") {
+		case "file": return readFileSync(blob, options);
+		case "base64": return parse(s2a(Base64.decode(blob)), options);
+		case "binary": return parse(s2a(blob), options);
 	}
 	return parse(blob);
 }</pre></li>
@@ -2330,10 +2323,10 @@ return {
   var data = new Uint8Array(arraybuffer);
   var arr = new Array();
   for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-  var bstr = arr.join(&#x22;&#x22;);
+  var bstr = arr.join("");
 
   /* Call XLS */
-  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:&#x22;binary&#x22;});
+  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:"binary"});
 
   /* DO SOMETHING WITH workbook HERE */
 }
@@ -2358,9 +2351,9 @@ oReq.send();
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function CheckField(hexstr, fld) {
-	var m = __hexlify(this,this.l,hexstr.length&#x3e;&#x3e;1);
-	if(m !== hexstr) throw fld + &#x27;Expected &#x27; + hexstr + &#x27; saw &#x27; + m;
-	this.l += hexstr.length&#x3e;&#x3e;1;
+	var m = __hexlify(this,this.l,hexstr.length&gt;&gt;1);
+	if(m !== hexstr) throw fld + 'Expected ' + hexstr + ' saw ' + m;
+	this.l += hexstr.length&gt;&gt;1;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -2375,56 +2368,56 @@ oReq.send();
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function ReadShift(size, t) {
-	var o=&#x22;&#x22;, oI, oR, oo=[], w, vv, i, loc;
+	var o="", oI, oR, oo=[], w, vv, i, loc;
 	switch(t) {
-		case &#x27;utf8&#x27;: o = __utf8(this, this.l, this.l + size); break;
-		case &#x27;utf16le&#x27;: size *= 2; o = __utf16le(this, this.l, this.l + size); break;
+		case 'utf8': o = __utf8(this, this.l, this.l + size); break;
+		case 'utf16le': size *= 2; o = __utf16le(this, this.l, this.l + size); break;
 
 		<span class="apidocCodeCommentSpan">/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
-</span>		case &#x27;lpstr&#x27;: o = __lpstr(this, this.l); size = 5 + o.length; break;
+</span>		case 'lpstr': o = __lpstr(this, this.l); size = 5 + o.length; break;
 		/* [MS-OLEDS] 2.1.5 LengthPrefixedUnicodeString */
-		case &#x27;lpwstr&#x27;: o = __lpwstr(this, this.l); size = 5 + o.length; if(o[o.length-1] == &#x27;\u0000&#x27;) size += 2; break;
+		case 'lpwstr': o = __lpwstr(this, this.l); size = 5 + o.length; if(o[o.length-1] == '\u0000') size += 2; break;
 
-		case &#x27;cstr&#x27;: size = 0; o = &#x22;&#x22;;
+		case 'cstr': size = 0; o = "";
 			while((w=__readUInt8(this, this.l + size++))!==0) oo.push(_getchar(w));
-			o = oo.join(&#x22;&#x22;); break;
-		case &#x27;wstr&#x27;: size = 0; o = &#x22;&#x22;;
+			o = oo.join(""); break;
+		case 'wstr': size = 0; o = "";
 			while((w=__readUInt16LE(this,this.l +size))!==0){oo.push(_getchar(w));size+=2;}
-			size+=2; o = oo.join(&#x22;&#x22;); break;
+			size+=2; o = oo.join(""); break;
 
 		/* sbcs and dbcs support continue records in the SST way TODO codepages */
-		case &#x27;dbcs-cont&#x27;: o = &#x22;&#x22;; loc = this.l;
+		case 'dbcs-cont': o = ""; loc = this.l;
 			for(i = 0; i != size; ++i) {
-				if(this.lens &#x26;&#x26; this.lens.indexOf(loc) !== -1) {
+				if(this.lens &amp;&amp; this.lens.indexOf(loc) !== -1) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, size-i, w ? &#x27;dbcs-cont&#x27; : &#x27;sbcs-cont&#x27;);
-					return oo.join(&#x22;&#x22;) + vv;
+					vv = ReadShift.call(this, size-i, w ? 'dbcs-cont' : 'sbcs-cont');
+					return oo.join("") + vv;
 				}
 				oo.push(_getchar(__readUInt16LE(this, loc)));
 				loc+=2;
-			} o = oo.join(&#x22;&#x22;); size *= 2; break;
+			} o = oo.join(""); size *= 2; break;
 
-		case &#x27;sbcs-cont&#x27;: o = &#x22;&#x22;; loc = this.l;
+		case 'sbcs-cont': o = ""; loc = this.l;
 			for(i = 0; i != size; ++i) {
-				if(this.lens &#x26;&#x26; this.lens.indexOf(loc) !== -1) {
+				if(this.lens &amp;&amp; this.lens.indexOf(loc) !== -1) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, size-i, w ? &#x27;dbcs-cont&#x27; : &#x27;sbcs-cont&#x27;);
-					return oo.join(&#x22;&#x22;) + vv;
+					vv = ReadShift.call(this, size-i, w ? 'dbcs-cont' : 'sbcs-cont');
+					return oo.join("") + vv;
 				}
 				oo.push(_getchar(__readUInt8(this, loc)));
 				loc+=1;
-			} o = oo.join(&#x22;&#x22;); break;
+			} o = oo.join(""); break;
 
 		default:
 	switch(size) {
 		case 1: oI = __readUInt8(this, this.l); this.l++; return oI;
-		case 2: oI = (t === &#x27;i&#x27; ? __readInt16LE : __readUInt16LE)(this, this.l); this.l += 2; return oI;
+		case 2: oI = (t === 'i' ? __readInt16LE : __readUInt16LE)(this, this.l); this.l += 2; return oI;
 		case 4:
-			if(t === &#x27;i&#x27; || (this[this.l+3] &#x26; 0x80)===0) { oI = __readInt32LE(this, this.l); this.l += 4; return oI; }
+			if(t === 'i' || (this[this.l+3] &amp; 0x80)===0) { oI = __readInt32LE(this, this.l); this.l += 4; return oI; }
 			else { oR = __readUInt32LE(this, this.l); this.l += 4; return oR; } break;
-		case 8: if(t === &#x27;f&#x27;) { oR = __double(this, this.l); this.l += 8; return oR; }
+		case 8: if(t === 'f') { oR = __double(this, this.l); this.l += 8; return oR; }
 		/* falls through */
 		case 16: o = __hexlify(this, this.l, size); break;
 	}}
@@ -2480,101 +2473,101 @@ oReq.send();
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function eval_fmt(fmt, v, opts, flen) {
-	var out = [], o = &#x22;&#x22;, i = 0, c = &#x22;&#x22;, lst=&#x27;t&#x27;, q, dt, j, cc;
-	var hr=&#x27;H&#x27;;
+	var out = [], o = "", i = 0, c = "", lst='t', q, dt, j, cc;
+	var hr='H';
 	<span class="apidocCodeCommentSpan">/* Tokenize */
-</span>	while(i &#x3c; fmt.length) {
+</span>	while(i &lt; fmt.length) {
 		switch((c = fmt[i])) {
-			case &#x27;G&#x27;: /* General */
-				if(!isgeneral(fmt, i)) throw new Error(&#x27;unrecognized character &#x27; + c + &#x27; in &#x27; +fmt);
-				out[out.length] = {t:&#x27;G&#x27;, v:&#x27;General&#x27;}; i+=7; break;
-			case &#x27;&#x22;&#x27;: /* Literal text */
-				for(o=&#x22;&#x22;;(cc=fmt.charCodeAt(++i)) !== 34 &#x26;&#x26; i &#x3c; fmt.length;) o += String.fromCharCode(cc);
-				out[out.length] = {t:&#x27;t&#x27;, v:o}; ++i; break;
-			case &#x27;\\&#x27;: var w = fmt[++i], t = (w === &#x22;(&#x22; || w === &#x22;)&#x22;) ? w : &#x27;t&#x27;;
+			case 'G': /* General */
+				if(!isgeneral(fmt, i)) throw new Error('unrecognized character ' + c + ' in ' +fmt);
+				out[out.length] = {t:'G', v:'General'}; i+=7; break;
+			case '"': /* Literal text */
+				for(o="";(cc=fmt.charCodeAt(++i)) !== 34 &amp;&amp; i &lt; fmt.length;) o += String.fromCharCode(cc);
+				out[out.length] = {t:'t', v:o}; ++i; break;
+			case '\\': var w = fmt[++i], t = (w === "(" || w === ")") ? w : 't';
 				out[out.length] = {t:t, v:w}; ++i; break;
-			case &#x27;_&#x27;: out[out.length] = {t:&#x27;t&#x27;, v:&#x22; &#x22;}; i+=2; break;
-			case &#x27;@&#x27;: /* Text Placeholder */
-				out[out.length] = {t:&#x27;T&#x27;, v:v}; ++i; break;
-			case &#x27;B&#x27;: case &#x27;b&#x27;:
-				if(fmt[i+1] === &#x22;1&#x22; || fmt[i+1] === &#x22;2&#x22;) {
-					if(dt==null) { dt=parse_date_code(v, opts, fmt[i+1] === &#x22;2&#x22;); if(dt==null) return &#x22;&#x22;; }
-					out[out.length] = {t:&#x27;X&#x27;, v:fmt.substr(i,2)}; lst = c; i+=2; break;
+			case '_': out[out.length] = {t:'t', v:" "}; i+=2; break;
+			case '@': /* Text Placeholder */
+				out[out.length] = {t:'T', v:v}; ++i; break;
+			case 'B': case 'b':
+				if(fmt[i+1] === "1" || fmt[i+1] === "2") {
+					if(dt==null) { dt=parse_date_code(v, opts, fmt[i+1] === "2"); if(dt==null) return ""; }
+					out[out.length] = {t:'X', v:fmt.substr(i,2)}; lst = c; i+=2; break;
 				}
 				/* falls through */
-			case &#x27;M&#x27;: case &#x27;D&#x27;: case &#x27;Y&#x27;: case &#x27;H&#x27;: case &#x27;S&#x27;: case &#x27;E&#x27;:
+			case 'M': case 'D': case 'Y': case 'H': case 'S': case 'E':
 				c = c.toLowerCase();
 				/* falls through */
-			case &#x27;m&#x27;: case &#x27;d&#x27;: case &#x27;y&#x27;: case &#x27;h&#x27;: case &#x27;s&#x27;: case &#x27;e&#x27;: case &#x27;g&#x27;:
-				if(v &#x3c; 0) return &#x22;&#x22;;
-				if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return &#x22;&#x22;; }
-				o = c; while(++i&#x3c;fmt.length &#x26;&#x26; fmt[i].toLowerCase() === c) o+=c;
-				if(c === &#x27;m&#x27; &#x26;&#x26; lst.toLowerCase() === &#x27;h&#x27;) c = &#x27;M&#x27;; /* m = minute */
-				if(c === &#x27;h&#x27;) c = hr;
+			case 'm': case 'd': case 'y': case 'h': case 's': case 'e': case 'g':
+				if(v &lt; 0) return "";
+				if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return ""; }
+				o = c; while(++i&lt;fmt.length &amp;&amp; fmt[i].toLowerCase() === c) o+=c;
+				if(c === 'm' &amp;&amp; lst.toLowerCase() === 'h') c = 'M'; /* m = minute */
+				if(c === 'h') c = hr;
 				out[out.length] = {t:c, v:o}; lst = c; break;
-			case &#x27;A&#x27;:
-				q={t:c, v:&#x22;A&#x22;};
+			case 'A':
+				q={t:c, v:"A"};
 				if(dt==null) dt=parse_date_code(v, opts);
-				if(fmt.substr(i, 3) === &#x22;A/P&#x22;) { if(dt!=null) q.v = dt.H &#x3e;= 12 ? &#x22;P&#x22; : &#x22;A&#x22;; q.t = &#x27;T&#x27;; hr=&#x27;h&#x27;;i+=3;}
-				else if(fmt.substr(i,5) === &#x22;AM/PM&#x22;) { if(dt!=null) q.v = dt.H &#x3e;= 12 ? &#x22;PM&#x22; : &#x22;AM&#x22;; q.t = &#x27;T&#x27;; i+=5; hr=&#x27;h&#x27;; }
-				else { q.t = &#x22;t&#x22;; ++i; }
-				if(dt==null &#x26;&#x26; q.t === &#x27;T&#x27;) return &#x22;&#x22;;
+				if(fmt.substr(i, 3) === "A/P") { if(dt!=null) q.v = dt.H &gt;= 12 ? "P" : "A"; q.t = 'T'; hr='h';i+=3;}
+				else if(fmt.substr(i,5) === "AM/PM") { if(dt!=null) q.v = dt.H &gt;= 12 ? "PM" : "AM"; q.t = 'T'; i+=5; hr='h'; }
+				else { q.t = "t"; ++i; }
+				if(dt==null &amp;&amp; q.t === 'T') return "";
 				out[out.length] = q; lst = c; break;
-			case &#x27;[&#x27;:
+			case '[':
 				o = c;
-				while(fmt[i++] !== &#x27;]&#x27; &#x26;&#x26; i &#x3c; fmt.length) o += fmt[i];
-				if(o.substr(-1) !== &#x27;]&#x27;) throw &#x27;unterminated &#x22;[&#x22; block: |&#x27; + o + &#x27;|&#x27;;
+				while(fmt[i++] !== ']' &amp;&amp; i &lt; fmt.length) o += fmt[i];
+				if(o.substr(-1) !== ']') throw 'unterminated "[" block: |' + o + '|';
 				if(o.match(abstime)) {
-					if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return &#x22;&#x22;; }
-					out[out.length] = {t:&#x27;Z&#x27;, v:o.toLowerCase()};
-				} else { o=&#x22;&#x22;; }
+					if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return ""; }
+					out[out.length] = {t:'Z', v:o.toLowerCase()};
+				} else { o=""; }
 				break;
 			/* Numbers */
-			case &#x27;.&#x27;:
+			case '.':
 				if(dt != null) {
-					o = c; while((c=fmt[++i]) === &#x22;0&#x22;) o += c;
-					out[out.length] = {t:&#x27;s&#x27;, v:o}; break;
+					o = c; while((c=fmt[++i]) === "0") o += c;
+					out[out.length] = {t:'s', v:o}; break;
 				}
 				/* falls through */
-			case &#x27;0&#x27;: case &#x27;#&#x27;:
-				o = c; while(&#x22;0#?.,E+-%&#x22;.indexOf(c=fmt[++i]) &#x3e; -1 || c==&#x27;\\&#x27; &#x26;&#x26; fmt[i+1] == &#x22;-&#x22; &#x26;&#x26; &#x22;0#&#x22;.indexOf(fmt[i+2])&#x3e;-1) o += c;
-				out[out.length] = {t:&#x27;n&#x27;, v:o}; break;
-			case &#x27;?&#x27;:
+			case '0': case '#':
+				o = c; while("0#?.,E+-%".indexOf(c=fmt[++i]) &gt; -1 || c=='\\' &amp;&amp; fmt[i+1] == "-" &amp;&amp; "0#".indexOf(fmt[i+2])&gt;-1) o += c;
+				out[out.length] = {t:'n', v:o}; break;
+			case '?':
 				o = c; while(fmt[++i] === c) o+=c;
 				q={t:c, v:o}; out[out.length] = q; lst = c; break;
-			case &#x27;*&#x27;: ++i; if(fmt[i] == &#x27; &#x27; || fmt[i] == &#x27;*&#x27;) ++i; break; // **
-			case &#x27;(&#x27;: case &#x27;)&#x27;: out[out.length] = {t:(flen===1?&#x27;t&#x27;:c), v:c}; ++i; break;
-			case &#x27;1&#x27;: case &#x27;2&#x27;: case &#x27;3&#x27;: case &#x27;4&#x27;: case &#x27;5&#x27;: case &#x27;6&#x27;: case &#x27;7&#x27;: case &#x27;8&#x27;: case &#x27;9&#x27;:
-				o = c; while(&#x22;0123456789&#x22;.indexOf(fmt[++i]) &#x3e; -1) o+=fmt[i];
-				out[out.length] = {t:&#x27;D&#x27;, v:o}; break;
-			case &#x27; &#x27;: out[out.length] = {t:c, v:c}; ++i; break;
+			case '*': ++i; if(fmt[i] == ' ' || fmt[i] == '*') ++i; break; // **
+			case '(': case ')': out[out.length] = {t:(flen===1?'t':c), v:c}; ++i; break;
+			case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+				o = c; while("0123456789".indexOf(fmt[++i]) &gt; -1) o+=fmt[i];
+				out[out.length] = {t:'D', v:o}; break;
+			case ' ': out[out.length] = {t:c, v:c}; ++i; break;
 			default:
-				if(&#x22;,$-+/():!^&#x26;&#x27;~{}&#x3c;&#x3e;=€acfijklopqrtuvwxz&#x22;.indexOf(c) === -1) throw new Error(&#x27;unrecognized character &#x27; + c + &#x27; in &#x27; + fmt);
-				out[out.length] = {t:&#x27;t&#x27;, v:c}; ++i; break;
+				if(",$-+/():!^&amp;'~{}&lt;&gt;=â‚¬acfijklopqrtuvwxz".indexOf(c) === -1) throw new Error('unrecognized character ' + c + ' in ' + fmt);
+				out[out.length] = {t:'t', v:c}; ++i; break;
 		}
 	}
 	var bt = 0, ss0 = 0, ssm;
-	for(i=out.length-1, lst=&#x27;t&#x27;; i &#x3e;= 0; --i) {
+	for(i=out.length-1, lst='t'; i &gt;= 0; --i) {
 		switch(out[i].t) {
-			case &#x27;h&#x27;: case &#x27;H&#x27;: out[i].t = hr; lst=&#x27;h&#x27;; if(bt &#x3c; 1) bt = 1; break;
-			case &#x27;s&#x27;:
+			case 'h': case 'H': out[i].t = hr; lst='h'; if(bt &lt; 1) bt = 1; break;
+			case 's':
 				if((ssm=out[i].v.match(/\.0+$/))) ss0=Math.max(ss0,ssm[0].length-1);
-				if(bt &#x3c; 3) bt = 3;
+				if(bt &lt; 3) bt = 3;
 			/* falls through */
-			case &#x27;d&#x27;: case &#x27;y&#x27;: case &#x27;M&#x27;: case &#x27;e&#x27;: lst=out[i].t; break;
-			case &#x27;m&#x27;: if(lst === &#x27;s&#x27;) { out[i].t = &#x27;M&#x27;; if(bt &#x3c; 2) bt = 2; } break;
-			case &#x27;X&#x27;: if(out[i].v === &#x22;B2&#x22;);
+			case 'd': case 'y': case 'M': case 'e': lst=out[i].t; break;
+			case 'm': if(lst === 's') { out[i].t = 'M'; if(bt &lt; 2) bt = 2; } break;
+			case 'X': if(out[i].v === "B2");
 				break;
-			case &#x27;Z&#x27;:
-				if(bt &#x3c; 1 &#x26;&#x26; out[i].v.match(/[Hh]/)) bt = 1;
-				if(bt &#x3c; 2 &#x26;&#x26; out[i].v.match(/[Mm]/)) bt = 2;
-				if(bt &#x3c; 3 &#x26;&#x26; out[i].v.match(/[Ss]/)) bt = 3;
+			case 'Z':
+				if(bt &lt; 1 &amp;&amp; out[i].v.match(/[Hh]/)) bt = 1;
+				if(bt &lt; 2 &amp;&amp; out[i].v.match(/[Mm]/)) bt = 2;
+				if(bt &lt; 3 &amp;&amp; out[i].v.match(/[Ss]/)) bt = 3;
 		}
 	}
 	switch(bt) {
 		case 0: break;
 		case 1:
-			if(dt.u &#x3e;= 0.5) { d ...</pre></li>
+			if(dt.u &gt;= 0.5) { d ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -2589,11 +2582,11 @@ oReq.send();
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function general_fmt(v, opts) {
 	switch(typeof v) {
-		case &#x27;string&#x27;: return v;
-		case &#x27;boolean&#x27;: return v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-		case &#x27;number&#x27;: return (v|0) === v ? general_fmt_int(v, opts) : general_fmt_num(v, opts);
+		case 'string': return v;
+		case 'boolean': return v ? "TRUE" : "FALSE";
+		case 'number': return (v|0) === v ? general_fmt_int(v, opts) : general_fmt_num(v, opts);
 	}
-	throw new Error(&#x22;unsupported value in General format: &#x22; + v);
+	throw new Error("unsupported value in General format: " + v);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -2607,7 +2600,7 @@ oReq.send();
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function general_fmt_int(v, opts) { return &#x22;&#x22;+v; }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function general_fmt_int(v, opts) { return ""+v; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -2622,8 +2615,8 @@ oReq.send();
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function general_fmt_num(v, opts) {
 	var V = Math.floor(Math.log(Math.abs(v))*Math.LOG10E), o;
-	if(V &#x3e;= -4 &#x26;&#x26; V &#x3c;= -1) o = v.toPrecision(10+V);
-	else if(Math.abs(V) &#x3c;= 9) o = gfn2(v);
+	if(V &gt;= -4 &amp;&amp; V &lt;= -1) o = v.toPrecision(10+V);
+	else if(Math.abs(V) &lt;= 9) o = gfn2(v);
 	else if(V === 10) o = v.toFixed(10).substr(0,12);
 	else o = gfn3(v);
 	return gfn5(gfn4(o));
@@ -2643,17 +2636,17 @@ oReq.send();
     <li>description and source-code<pre class="apidocCodePre">function split_fmt(fmt) {
 	var out = [];
 	var in_str = false, cc;
-	for(var i = 0, j = 0; i &#x3c; fmt.length; ++i) switch((cc=fmt.charCodeAt(i))) {
-		case 34:<span class="apidocCodeCommentSpan"> /* &#x27;&#x22;&#x27; */
+	for(var i = 0, j = 0; i &lt; fmt.length; ++i) switch((cc=fmt.charCodeAt(i))) {
+		case 34:<span class="apidocCodeCommentSpan"> /* '"' */
 </span>			in_str = !in_str; break;
-		case 95: case 42: case 92: /* &#x27;_&#x27; &#x27;*&#x27; &#x27;\\&#x27; */
+		case 95: case 42: case 92: /* '_' '*' '\\' */
 			++i; break;
-		case 59: /* &#x27;;&#x27; */
+		case 59: /* ';' */
 			out[out.length] = fmt.substr(j,i-j);
 			j = i+1;
 	}
 	out[out.length] = fmt.substr(j);
-	if(in_str === true) throw new Error(&#x22;Format |&#x22; + fmt + &#x22;| unterminated string &#x22;);
+	if(in_str === true) throw new Error("Format |" + fmt + "| unterminated string ");
 	return out;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -2670,16 +2663,16 @@ oReq.send();
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function format(fmt, v, o) {
 	fixopts(o != null ? o : (o=[]));
-	var sfmt = &#x22;&#x22;;
+	var sfmt = "";
 	switch(typeof fmt) {
-		case &#x22;string&#x22;: sfmt = fmt; break;
-		case &#x22;number&#x22;: sfmt = (o.table != null ? o.table : table_fmt)[fmt]; break;
+		case "string": sfmt = fmt; break;
+		case "number": sfmt = (o.table != null ? o.table : table_fmt)[fmt]; break;
 	}
 	if(isgeneral(sfmt,0)) return general_fmt(v, o);
 	var f = choose_fmt(sfmt, v);
 	if(isgeneral(f[1])) return general_fmt(v, o);
-	if(v === true) v = &#x22;TRUE&#x22;; else if(v === false) v = &#x22;FALSE&#x22;;
-	else if(v === &#x22;&#x22; || v == null) return &#x22;&#x22;;
+	if(v === true) v = "TRUE"; else if(v === false) v = "FALSE";
+	else if(v === "" || v == null) return "";
 	return eval_fmt(f[1], v, o, f[0]);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -2734,27 +2727,27 @@ oReq.send();
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function parse_date_code(v, opts, b2) {
-	if(v &#x3e; 2958465 || v &#x3c; 0) return null;
+	if(v &gt; 2958465 || v &lt; 0) return null;
 	var date = (v|0), time = Math.floor(86400 * (v - date)), dow=0;
 	var dout=[];
 	var out={D:date, T:time, u:86400*(v-date)-time,y:0,m:0,d:0,H:0,M:0,S:0,q:0};
-	if(Math.abs(out.u) &#x3c; 1e-6) out.u = 0;
+	if(Math.abs(out.u) &lt; 1e-6) out.u = 0;
 	fixopts(opts != null ? opts : (opts=[]));
 	if(opts.date1904) date += 1462;
-	if(out.u &#x3e; 0.999) {
+	if(out.u &gt; 0.999) {
 		out.u = 0;
 		if(++time == 86400) { time = 0; ++date; }
 	}
 	if(date === 60) {dout = b2 ? [1317,10,29] : [1900,2,29]; dow=3;}
 	else if(date === 0) {dout = b2 ? [1317,8,29] : [1900,1,0]; dow=6;}
 	else {
-		if(date &#x3e; 60) --date;
+		if(date &gt; 60) --date;
 		<span class="apidocCodeCommentSpan">/* 1 = Jan 1 1900 */
 </span>		var d = new Date(1900,0,1);
 		d.setDate(d.getDate() + date - 1);
 		dout = [d.getFullYear(), d.getMonth()+1,d.getDate()];
 		dow = d.getDay();
-		if(date &#x3c; 60) dow = (dow + 6) % 7;
+		if(date &lt; 60) dow = (dow + 6) % 7;
 		if(b2) dow = fix_hijri(d, dout);
 	}
 	out.y = dout[0]; out.m = dout[1]; out.d = dout[2];
@@ -2788,101 +2781,101 @@ oReq.send();
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function eval_fmt(fmt, v, opts, flen) {
-	var out = [], o = &#x22;&#x22;, i = 0, c = &#x22;&#x22;, lst=&#x27;t&#x27;, q, dt, j, cc;
-	var hr=&#x27;H&#x27;;
+	var out = [], o = "", i = 0, c = "", lst='t', q, dt, j, cc;
+	var hr='H';
 	<span class="apidocCodeCommentSpan">/* Tokenize */
-</span>	while(i &#x3c; fmt.length) {
+</span>	while(i &lt; fmt.length) {
 		switch((c = fmt[i])) {
-			case &#x27;G&#x27;: /* General */
-				if(!isgeneral(fmt, i)) throw new Error(&#x27;unrecognized character &#x27; + c + &#x27; in &#x27; +fmt);
-				out[out.length] = {t:&#x27;G&#x27;, v:&#x27;General&#x27;}; i+=7; break;
-			case &#x27;&#x22;&#x27;: /* Literal text */
-				for(o=&#x22;&#x22;;(cc=fmt.charCodeAt(++i)) !== 34 &#x26;&#x26; i &#x3c; fmt.length;) o += String.fromCharCode(cc);
-				out[out.length] = {t:&#x27;t&#x27;, v:o}; ++i; break;
-			case &#x27;\\&#x27;: var w = fmt[++i], t = (w === &#x22;(&#x22; || w === &#x22;)&#x22;) ? w : &#x27;t&#x27;;
+			case 'G': /* General */
+				if(!isgeneral(fmt, i)) throw new Error('unrecognized character ' + c + ' in ' +fmt);
+				out[out.length] = {t:'G', v:'General'}; i+=7; break;
+			case '"': /* Literal text */
+				for(o="";(cc=fmt.charCodeAt(++i)) !== 34 &amp;&amp; i &lt; fmt.length;) o += String.fromCharCode(cc);
+				out[out.length] = {t:'t', v:o}; ++i; break;
+			case '\\': var w = fmt[++i], t = (w === "(" || w === ")") ? w : 't';
 				out[out.length] = {t:t, v:w}; ++i; break;
-			case &#x27;_&#x27;: out[out.length] = {t:&#x27;t&#x27;, v:&#x22; &#x22;}; i+=2; break;
-			case &#x27;@&#x27;: /* Text Placeholder */
-				out[out.length] = {t:&#x27;T&#x27;, v:v}; ++i; break;
-			case &#x27;B&#x27;: case &#x27;b&#x27;:
-				if(fmt[i+1] === &#x22;1&#x22; || fmt[i+1] === &#x22;2&#x22;) {
-					if(dt==null) { dt=parse_date_code(v, opts, fmt[i+1] === &#x22;2&#x22;); if(dt==null) return &#x22;&#x22;; }
-					out[out.length] = {t:&#x27;X&#x27;, v:fmt.substr(i,2)}; lst = c; i+=2; break;
+			case '_': out[out.length] = {t:'t', v:" "}; i+=2; break;
+			case '@': /* Text Placeholder */
+				out[out.length] = {t:'T', v:v}; ++i; break;
+			case 'B': case 'b':
+				if(fmt[i+1] === "1" || fmt[i+1] === "2") {
+					if(dt==null) { dt=parse_date_code(v, opts, fmt[i+1] === "2"); if(dt==null) return ""; }
+					out[out.length] = {t:'X', v:fmt.substr(i,2)}; lst = c; i+=2; break;
 				}
 				/* falls through */
-			case &#x27;M&#x27;: case &#x27;D&#x27;: case &#x27;Y&#x27;: case &#x27;H&#x27;: case &#x27;S&#x27;: case &#x27;E&#x27;:
+			case 'M': case 'D': case 'Y': case 'H': case 'S': case 'E':
 				c = c.toLowerCase();
 				/* falls through */
-			case &#x27;m&#x27;: case &#x27;d&#x27;: case &#x27;y&#x27;: case &#x27;h&#x27;: case &#x27;s&#x27;: case &#x27;e&#x27;: case &#x27;g&#x27;:
-				if(v &#x3c; 0) return &#x22;&#x22;;
-				if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return &#x22;&#x22;; }
-				o = c; while(++i&#x3c;fmt.length &#x26;&#x26; fmt[i].toLowerCase() === c) o+=c;
-				if(c === &#x27;m&#x27; &#x26;&#x26; lst.toLowerCase() === &#x27;h&#x27;) c = &#x27;M&#x27;; /* m = minute */
-				if(c === &#x27;h&#x27;) c = hr;
+			case 'm': case 'd': case 'y': case 'h': case 's': case 'e': case 'g':
+				if(v &lt; 0) return "";
+				if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return ""; }
+				o = c; while(++i&lt;fmt.length &amp;&amp; fmt[i].toLowerCase() === c) o+=c;
+				if(c === 'm' &amp;&amp; lst.toLowerCase() === 'h') c = 'M'; /* m = minute */
+				if(c === 'h') c = hr;
 				out[out.length] = {t:c, v:o}; lst = c; break;
-			case &#x27;A&#x27;:
-				q={t:c, v:&#x22;A&#x22;};
+			case 'A':
+				q={t:c, v:"A"};
 				if(dt==null) dt=parse_date_code(v, opts);
-				if(fmt.substr(i, 3) === &#x22;A/P&#x22;) { if(dt!=null) q.v = dt.H &#x3e;= 12 ? &#x22;P&#x22; : &#x22;A&#x22;; q.t = &#x27;T&#x27;; hr=&#x27;h&#x27;;i+=3;}
-				else if(fmt.substr(i,5) === &#x22;AM/PM&#x22;) { if(dt!=null) q.v = dt.H &#x3e;= 12 ? &#x22;PM&#x22; : &#x22;AM&#x22;; q.t = &#x27;T&#x27;; i+=5; hr=&#x27;h&#x27;; }
-				else { q.t = &#x22;t&#x22;; ++i; }
-				if(dt==null &#x26;&#x26; q.t === &#x27;T&#x27;) return &#x22;&#x22;;
+				if(fmt.substr(i, 3) === "A/P") { if(dt!=null) q.v = dt.H &gt;= 12 ? "P" : "A"; q.t = 'T'; hr='h';i+=3;}
+				else if(fmt.substr(i,5) === "AM/PM") { if(dt!=null) q.v = dt.H &gt;= 12 ? "PM" : "AM"; q.t = 'T'; i+=5; hr='h'; }
+				else { q.t = "t"; ++i; }
+				if(dt==null &amp;&amp; q.t === 'T') return "";
 				out[out.length] = q; lst = c; break;
-			case &#x27;[&#x27;:
+			case '[':
 				o = c;
-				while(fmt[i++] !== &#x27;]&#x27; &#x26;&#x26; i &#x3c; fmt.length) o += fmt[i];
-				if(o.substr(-1) !== &#x27;]&#x27;) throw &#x27;unterminated &#x22;[&#x22; block: |&#x27; + o + &#x27;|&#x27;;
+				while(fmt[i++] !== ']' &amp;&amp; i &lt; fmt.length) o += fmt[i];
+				if(o.substr(-1) !== ']') throw 'unterminated "[" block: |' + o + '|';
 				if(o.match(abstime)) {
-					if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return &#x22;&#x22;; }
-					out[out.length] = {t:&#x27;Z&#x27;, v:o.toLowerCase()};
-				} else { o=&#x22;&#x22;; }
+					if(dt==null) { dt=parse_date_code(v, opts); if(dt==null) return ""; }
+					out[out.length] = {t:'Z', v:o.toLowerCase()};
+				} else { o=""; }
 				break;
 			/* Numbers */
-			case &#x27;.&#x27;:
+			case '.':
 				if(dt != null) {
-					o = c; while((c=fmt[++i]) === &#x22;0&#x22;) o += c;
-					out[out.length] = {t:&#x27;s&#x27;, v:o}; break;
+					o = c; while((c=fmt[++i]) === "0") o += c;
+					out[out.length] = {t:'s', v:o}; break;
 				}
 				/* falls through */
-			case &#x27;0&#x27;: case &#x27;#&#x27;:
-				o = c; while(&#x22;0#?.,E+-%&#x22;.indexOf(c=fmt[++i]) &#x3e; -1 || c==&#x27;\\&#x27; &#x26;&#x26; fmt[i+1] == &#x22;-&#x22; &#x26;&#x26; &#x22;0#&#x22;.indexOf(fmt[i+2])&#x3e;-1) o += c;
-				out[out.length] = {t:&#x27;n&#x27;, v:o}; break;
-			case &#x27;?&#x27;:
+			case '0': case '#':
+				o = c; while("0#?.,E+-%".indexOf(c=fmt[++i]) &gt; -1 || c=='\\' &amp;&amp; fmt[i+1] == "-" &amp;&amp; "0#".indexOf(fmt[i+2])&gt;-1) o += c;
+				out[out.length] = {t:'n', v:o}; break;
+			case '?':
 				o = c; while(fmt[++i] === c) o+=c;
 				q={t:c, v:o}; out[out.length] = q; lst = c; break;
-			case &#x27;*&#x27;: ++i; if(fmt[i] == &#x27; &#x27; || fmt[i] == &#x27;*&#x27;) ++i; break; // **
-			case &#x27;(&#x27;: case &#x27;)&#x27;: out[out.length] = {t:(flen===1?&#x27;t&#x27;:c), v:c}; ++i; break;
-			case &#x27;1&#x27;: case &#x27;2&#x27;: case &#x27;3&#x27;: case &#x27;4&#x27;: case &#x27;5&#x27;: case &#x27;6&#x27;: case &#x27;7&#x27;: case &#x27;8&#x27;: case &#x27;9&#x27;:
-				o = c; while(&#x22;0123456789&#x22;.indexOf(fmt[++i]) &#x3e; -1) o+=fmt[i];
-				out[out.length] = {t:&#x27;D&#x27;, v:o}; break;
-			case &#x27; &#x27;: out[out.length] = {t:c, v:c}; ++i; break;
+			case '*': ++i; if(fmt[i] == ' ' || fmt[i] == '*') ++i; break; // **
+			case '(': case ')': out[out.length] = {t:(flen===1?'t':c), v:c}; ++i; break;
+			case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+				o = c; while("0123456789".indexOf(fmt[++i]) &gt; -1) o+=fmt[i];
+				out[out.length] = {t:'D', v:o}; break;
+			case ' ': out[out.length] = {t:c, v:c}; ++i; break;
 			default:
-				if(&#x22;,$-+/():!^&#x26;&#x27;~{}&#x3c;&#x3e;=€acfijklopqrtuvwxz&#x22;.indexOf(c) === -1) throw new Error(&#x27;unrecognized character &#x27; + c + &#x27; in &#x27; + fmt);
-				out[out.length] = {t:&#x27;t&#x27;, v:c}; ++i; break;
+				if(",$-+/():!^&amp;'~{}&lt;&gt;=â‚¬acfijklopqrtuvwxz".indexOf(c) === -1) throw new Error('unrecognized character ' + c + ' in ' + fmt);
+				out[out.length] = {t:'t', v:c}; ++i; break;
 		}
 	}
 	var bt = 0, ss0 = 0, ssm;
-	for(i=out.length-1, lst=&#x27;t&#x27;; i &#x3e;= 0; --i) {
+	for(i=out.length-1, lst='t'; i &gt;= 0; --i) {
 		switch(out[i].t) {
-			case &#x27;h&#x27;: case &#x27;H&#x27;: out[i].t = hr; lst=&#x27;h&#x27;; if(bt &#x3c; 1) bt = 1; break;
-			case &#x27;s&#x27;:
+			case 'h': case 'H': out[i].t = hr; lst='h'; if(bt &lt; 1) bt = 1; break;
+			case 's':
 				if((ssm=out[i].v.match(/\.0+$/))) ss0=Math.max(ss0,ssm[0].length-1);
-				if(bt &#x3c; 3) bt = 3;
+				if(bt &lt; 3) bt = 3;
 			/* falls through */
-			case &#x27;d&#x27;: case &#x27;y&#x27;: case &#x27;M&#x27;: case &#x27;e&#x27;: lst=out[i].t; break;
-			case &#x27;m&#x27;: if(lst === &#x27;s&#x27;) { out[i].t = &#x27;M&#x27;; if(bt &#x3c; 2) bt = 2; } break;
-			case &#x27;X&#x27;: if(out[i].v === &#x22;B2&#x22;);
+			case 'd': case 'y': case 'M': case 'e': lst=out[i].t; break;
+			case 'm': if(lst === 's') { out[i].t = 'M'; if(bt &lt; 2) bt = 2; } break;
+			case 'X': if(out[i].v === "B2");
 				break;
-			case &#x27;Z&#x27;:
-				if(bt &#x3c; 1 &#x26;&#x26; out[i].v.match(/[Hh]/)) bt = 1;
-				if(bt &#x3c; 2 &#x26;&#x26; out[i].v.match(/[Mm]/)) bt = 2;
-				if(bt &#x3c; 3 &#x26;&#x26; out[i].v.match(/[Ss]/)) bt = 3;
+			case 'Z':
+				if(bt &lt; 1 &amp;&amp; out[i].v.match(/[Hh]/)) bt = 1;
+				if(bt &lt; 2 &amp;&amp; out[i].v.match(/[Mm]/)) bt = 2;
+				if(bt &lt; 3 &amp;&amp; out[i].v.match(/[Ss]/)) bt = 3;
 		}
 	}
 	switch(bt) {
 		case 0: break;
 		case 1:
-			if(dt.u &#x3e;= 0.5) { d ...</pre></li>
+			if(dt.u &gt;= 0.5) { d ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -2902,11 +2895,11 @@ oReq.send();
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function general_fmt(v, opts) {
 	switch(typeof v) {
-		case &#x27;string&#x27;: return v;
-		case &#x27;boolean&#x27;: return v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-		case &#x27;number&#x27;: return (v|0) === v ? general_fmt_int(v, opts) : general_fmt_num(v, opts);
+		case 'string': return v;
+		case 'boolean': return v ? "TRUE" : "FALSE";
+		case 'number': return (v|0) === v ? general_fmt_int(v, opts) : general_fmt_num(v, opts);
 	}
-	throw new Error(&#x22;unsupported value in General format: &#x22; + v);
+	throw new Error("unsupported value in General format: " + v);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -2925,7 +2918,7 @@ oReq.send();
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function general_fmt_int(v, opts) { return &#x22;&#x22;+v; }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function general_fmt_int(v, opts) { return ""+v; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -2945,8 +2938,8 @@ oReq.send();
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function general_fmt_num(v, opts) {
 	var V = Math.floor(Math.log(Math.abs(v))*Math.LOG10E), o;
-	if(V &#x3e;= -4 &#x26;&#x26; V &#x3c;= -1) o = v.toPrecision(10+V);
-	else if(Math.abs(V) &#x3c;= 9) o = gfn2(v);
+	if(V &gt;= -4 &amp;&amp; V &lt;= -1) o = v.toPrecision(10+V);
+	else if(Math.abs(V) &lt;= 9) o = gfn2(v);
 	else if(V === 10) o = v.toFixed(10).substr(0,12);
 	else o = gfn3(v);
 	return gfn5(gfn4(o));
@@ -2971,17 +2964,17 @@ oReq.send();
     <li>description and source-code<pre class="apidocCodePre">function split_fmt(fmt) {
 	var out = [];
 	var in_str = false, cc;
-	for(var i = 0, j = 0; i &#x3c; fmt.length; ++i) switch((cc=fmt.charCodeAt(i))) {
-		case 34:<span class="apidocCodeCommentSpan"> /* &#x27;&#x22;&#x27; */
+	for(var i = 0, j = 0; i &lt; fmt.length; ++i) switch((cc=fmt.charCodeAt(i))) {
+		case 34:<span class="apidocCodeCommentSpan"> /* '"' */
 </span>			in_str = !in_str; break;
-		case 95: case 42: case 92: /* &#x27;_&#x27; &#x27;*&#x27; &#x27;\\&#x27; */
+		case 95: case 42: case 92: /* '_' '*' '\\' */
 			++i; break;
-		case 59: /* &#x27;;&#x27; */
+		case 59: /* ';' */
 			out[out.length] = fmt.substr(j,i-j);
 			j = i+1;
 	}
 	out[out.length] = fmt.substr(j);
-	if(in_str === true) throw new Error(&#x22;Format |&#x22; + fmt + &#x22;| unterminated string &#x22;);
+	if(in_str === true) throw new Error("Format |" + fmt + "| unterminated string ");
 	return out;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -3003,16 +2996,16 @@ oReq.send();
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function format(fmt, v, o) {
 	fixopts(o != null ? o : (o=[]));
-	var sfmt = &#x22;&#x22;;
+	var sfmt = "";
 	switch(typeof fmt) {
-		case &#x22;string&#x22;: sfmt = fmt; break;
-		case &#x22;number&#x22;: sfmt = (o.table != null ? o.table : table_fmt)[fmt]; break;
+		case "string": sfmt = fmt; break;
+		case "number": sfmt = (o.table != null ? o.table : table_fmt)[fmt]; break;
 	}
 	if(isgeneral(sfmt,0)) return general_fmt(v, o);
 	var f = choose_fmt(sfmt, v);
 	if(isgeneral(f[1])) return general_fmt(v, o);
-	if(v === true) v = &#x22;TRUE&#x22;; else if(v === false) v = &#x22;FALSE&#x22;;
-	else if(v === &#x22;&#x22; || v == null) return &#x22;&#x22;;
+	if(v === true) v = "TRUE"; else if(v === false) v = "FALSE";
+	else if(v === "" || v == null) return "";
 	return eval_fmt(f[1], v, o, f[0]);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
@@ -3087,27 +3080,27 @@ oReq.send();
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function parse_date_code(v, opts, b2) {
-	if(v &#x3e; 2958465 || v &#x3c; 0) return null;
+	if(v &gt; 2958465 || v &lt; 0) return null;
 	var date = (v|0), time = Math.floor(86400 * (v - date)), dow=0;
 	var dout=[];
 	var out={D:date, T:time, u:86400*(v-date)-time,y:0,m:0,d:0,H:0,M:0,S:0,q:0};
-	if(Math.abs(out.u) &#x3c; 1e-6) out.u = 0;
+	if(Math.abs(out.u) &lt; 1e-6) out.u = 0;
 	fixopts(opts != null ? opts : (opts=[]));
 	if(opts.date1904) date += 1462;
-	if(out.u &#x3e; 0.999) {
+	if(out.u &gt; 0.999) {
 		out.u = 0;
 		if(++time == 86400) { time = 0; ++date; }
 	}
 	if(date === 60) {dout = b2 ? [1317,10,29] : [1900,2,29]; dow=3;}
 	else if(date === 0) {dout = b2 ? [1317,8,29] : [1900,1,0]; dow=6;}
 	else {
-		if(date &#x3e; 60) --date;
+		if(date &gt; 60) --date;
 		<span class="apidocCodeCommentSpan">/* 1 = Jan 1 1900 */
 </span>		var d = new Date(1900,0,1);
 		d.setDate(d.getDate() + date - 1);
 		dout = [d.getFullYear(), d.getMonth()+1,d.getDate()];
 		dow = d.getDay();
-		if(date &#x3c; 60) dow = (dow + 6) % 7;
+		if(date &lt; 60) dow = (dow + 6) % 7;
 		if(b2) dow = fix_hijri(d, dout);
 	}
 	out.y = dout[0]; out.m = dout[1]; out.d = dout[2];
@@ -3140,22 +3133,22 @@ fix_read_opts(options);
 reset_cp();
 var CompObj, Summary, Workbook;
 if(cfb.FullPaths) {
-	CompObj = cfb.find(&#x27;!CompObj&#x27;);
-	Summary = cfb.find(&#x27;!SummaryInformation&#x27;);
-	Workbook = cfb.find(&#x27;/Workbook&#x27;);
+	CompObj = cfb.find('!CompObj');
+	Summary = cfb.find('!SummaryInformation');
+	Workbook = cfb.find('/Workbook');
 } else {
 	prep_blob(cfb, 0);
 	Workbook = ({content: cfb});
 }
 
-if(!Workbook) Workbook = cfb.find(&#x27;/Book&#x27;);
+if(!Workbook) Workbook = cfb.find('/Book');
 var CompObjP, SummaryP, WorkbookP;
 
 if(CompObj) CompObjP = parse_compobj(CompObj);
-if(options.bookProps &#x26;&#x26; !options.bookSheets) WorkbookP = {};
+if(options.bookProps &amp;&amp; !options.bookSheets) WorkbookP = {};
 else {
 	if(Workbook) WorkbookP = parse_workbook(Workbook.content, options, !!Workbook.find);
-	else throw new Error(&#x22;Cannot find Workbook stream&#x22;);
+	else throw new Error("Cannot find Workbook stream");
 }
 
 if(cfb.FullPaths) parse_props(cfb);
@@ -3188,13 +3181,13 @@ return WorkbookP;
     <li>description and source-code<pre class="apidocCodePre">function xlsread(f, o) {
 	var n=0;
 	if(!o) o = {};
-	if(!o.type) o.type = (has_buf &#x26;&#x26; Buffer.isBuffer(f)) ? &#x22;buffer&#x22; : &#x22;base64&#x22;;
+	if(!o.type) o.type = (has_buf &amp;&amp; Buffer.isBuffer(f)) ? "buffer" : "base64";
 	switch((n = firstbyte(f, o))) {
 		case 0xD0: return parse_xlscfb(CFB.read(f, o), o);
-		case 0x09: return parse_xlscfb(s2a(o.type === &#x27;base64&#x27; ? Base64.decode(f) : f), o);
+		case 0x09: return parse_xlscfb(s2a(o.type === 'base64' ? Base64.decode(f) : f), o);
 		case 0x3C: return parse_xlml(f, o);
 		case 0xEF: return parse_xlml(f, o);
-		default: throw new Error(&#x22;Unsupported file &#x22; + n);
+		default: throw new Error("Unsupported file " + n);
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -3202,10 +3195,10 @@ return WorkbookP;
   var data = new Uint8Array(arraybuffer);
   var arr = new Array();
   for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-  var bstr = arr.join(&#x22;&#x22;);
+  var bstr = arr.join("");
 
   /* Call XLS */
-  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:&#x22;binary&#x22;});
+  var workbook = XLS.<span class="apidocCodeKeywordSpan">read</span>(bstr, {type:"binary"});
 
   /* DO SOMETHING WITH workbook HERE */
 }
@@ -3232,12 +3225,12 @@ oReq.send();
     <li>description and source-code<pre class="apidocCodePre">readFile = function (f, o) {
 	var d = fs.readFileSync(f);
 	if(!o) o = {};
-	switch(firstbyte(d, {type:&#x27;buffer&#x27;})) {
-		case 0xD0: return parse_xlscfb(CFB.read(d,{type:&#x27;buffer&#x27;}),o);
+	switch(firstbyte(d, {type:'buffer'})) {
+		case 0xD0: return parse_xlscfb(CFB.read(d,{type:'buffer'}),o);
 		case 0x09: return parse_xlscfb(d, o);
-		case 0x3C: return parse_xlml(d, (o.type=&#x22;buffer&#x22;,o));
-		case 0xEF: return parse_xlml(d, (o.type=&#x22;buffer&#x22;,o));
-		default: throw &#x22;Unsupported file&#x22;;
+		case 0x3C: return parse_xlml(d, (o.type="buffer",o));
+		case 0xEF: return parse_xlml(d, (o.type="buffer",o));
+		default: throw "Unsupported file";
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -3247,13 +3240,13 @@ data and feeding it into the library.  Here are a few common scenarios:
 - node readFile:
 
 ```js
-if(typeof require !== &#x27;undefined&#x27;) XLS = require(&#x27;xlsjs&#x27;);
-var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;test.xls&#x27;);
+if(typeof require !== 'undefined') XLS = require('xlsjs');
+var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>('test.xls');
 /* DO SOMETHING WITH workbook HERE */
 ```
 
 - ajax (for a more complete example that works in older browsers, check the demo
-  at &#x3c;http://oss.sheetjs.com/js-xls/ajax.html&#x3e;):
+  at &lt;http://oss.sheetjs.com/js-xls/ajax.html&gt;):
 
 ```js
 ...</pre></li>
@@ -3300,7 +3293,7 @@ var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;tes
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function decode_range(range) { var x =range.split(&#x22;:&#x22;).map(decode_cell); return {s:x[0],e:x[x.length-1]}; }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function decode_range(range) { var x =range.split(":").map(decode_cell); return {s:x[0],e:x[x.length-1]}; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -3339,7 +3332,7 @@ var workbook = XLS.<span class="apidocCodeKeywordSpan">readFile</span>(&#x27;tes
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function encode_col(col) { var s=&#x22;&#x22;; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s;
+    <li>description and source-code<pre class="apidocCodePre">function encode_col(col) { var s=""; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s;
 return s; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -3354,9 +3347,9 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function encode_range(cs, ce) {
-	if(ce === undefined || typeof ce === &#x27;number&#x27;) return encode_range(cs.s, cs.e);
-	if(typeof cs !== &#x27;string&#x27;) cs = encode_cell(cs); if(typeof ce !== &#x27;string&#x27;) ce = encode_cell(ce);
-	return cs == ce ? cs : cs + &#x22;:&#x22; + ce;
+	if(ce === undefined || typeof ce === 'number') return encode_range(cs.s, cs.e);
+	if(typeof cs !== 'string') cs = encode_cell(cs); if(typeof ce !== 'string') ce = encode_cell(ce);
+	return cs == ce ? cs : cs + ":" + ce;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -3370,7 +3363,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function encode_row(row) { return &#x22;&#x22; + (row + 1); }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function encode_row(row) { return "" + (row + 1); }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -3384,7 +3377,7 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function format_cell(cell, v) {
-	if(cell == null || cell.t == null) return &#x22;&#x22;;
+	if(cell == null || cell.t == null) return "";
 	if(cell.w !== undefined) return cell.w;
 	if(v === undefined) return safe_format_cell(cell, cell.v);
 	return safe_format_cell(cell, v);
@@ -3402,33 +3395,33 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_formulae(sheet) {
-	var y = &#x22;&#x22;, x, val=&#x22;&#x22;;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	var r = safe_decode_range(sheet[&#x27;!ref&#x27;]), rr = &#x22;&#x22;, cols = [], C;
+	var y = "", x, val="";
+	if(sheet == null || sheet["!ref"] == null) return [];
+	var r = safe_decode_range(sheet['!ref']), rr = "", cols = [], C;
 	var cmds = new Array((r.e.r-r.s.r+1)*(r.e.c-r.s.c+1));
 	var i = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(var R = r.s.r; R &#x3c;= r.e.r; ++R) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(var R = r.s.r; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			y = cols[C] + rr;
 			x = sheet[y];
-			val = &#x22;&#x22;;
+			val = "";
 			if(x === undefined) continue;
 			else if(x.F != null) {
 				y = x.F;
 				if(!x.f) continue;
 				val = x.f;
-				if(y.indexOf(&#x22;:&#x22;) == -1) y = y + &#x22;:&#x22; + y;
+				if(y.indexOf(":") == -1) y = y + ":" + y;
 			}
 			if(x.f != null) val = x.f;
-			else if(x.t == &#x27;n&#x27; &#x26;&#x26; x.v != null) val = &#x22;&#x22; + x.v;
-			else if(x.t == &#x27;b&#x27;) val = x.v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-			else if(x.w !== undefined) val = &#x22;&#x27;&#x22; + x.w;
+			else if(x.t == 'n' &amp;&amp; x.v != null) val = "" + x.v;
+			else if(x.t == 'b') val = x.v ? "TRUE" : "FALSE";
+			else if(x.w !== undefined) val = "'" + x.w;
 			else if(x.v === undefined) continue;
-			else if(x.t == &#x27;s&#x27;) val = &#x22;&#x27;&#x22; + x.v;
-			else val = &#x22;&#x22;+x.v;
-			cmds[i++] = y + &#x22;=&#x22; + val;
+			else if(x.t == 's') val = "'" + x.v;
+			else val = ""+x.v;
+			cmds[i++] = y + "=" + val;
 		}
 	}
 	cmds.length = i;
@@ -3447,25 +3440,25 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_csv(sheet, opts) {
-	var out = &#x22;&#x22;, txt = &#x22;&#x22;, qreg = /&#x22;/g;
+	var out = "", txt = "", qreg = /"/g;
 	var o = opts == null ? {} : opts;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return &#x22;&#x22;;
-	var r = safe_decode_range(sheet[&#x22;!ref&#x22;]);
-	var FS = o.FS !== undefined ? o.FS : &#x22;,&#x22;, fs = FS.charCodeAt(0);
-	var RS = o.RS !== undefined ? o.RS : &#x22;\n&#x22;, rs = RS.charCodeAt(0);
-	var row = &#x22;&#x22;, rr = &#x22;&#x22;, cols = [];
+	if(sheet == null || sheet["!ref"] == null) return "";
+	var r = safe_decode_range(sheet["!ref"]);
+	var FS = o.FS !== undefined ? o.FS : ",", fs = FS.charCodeAt(0);
+	var RS = o.RS !== undefined ? o.RS : "\n", rs = RS.charCodeAt(0);
+	var row = "", rr = "", cols = [];
 	var i = 0, cc = 0, val;
 	var R = 0, C = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(R = r.s.r; R &#x3c;= r.e.r; ++R) {
-		row = &#x22;&#x22;;
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(R = r.s.r; R &lt;= r.e.r; ++R) {
+		row = "";
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
-			txt = val !== undefined ? &#x27;&#x27;+format_cell(val) : &#x22;&#x22;;
+			txt = val !== undefined ? ''+format_cell(val) : "";
 			for(i = 0, cc = 0; i !== txt.length; ++i) if((cc = txt.charCodeAt(i)) === fs || cc === rs || cc === 34) {
-				txt = &#x22;\&#x22;&#x22; + txt.replace(qreg, &#x27;&#x22;&#x22;&#x27;) + &#x22;\&#x22;&#x22;; break; }
-			row += (C === r.s.c ? &#x22;&#x22; : FS) + txt;
+				txt = "\"" + txt.replace(qreg, '""') + "\""; break; }
+			row += (C === r.s.c ? "" : FS) + txt;
 		}
 		out += row + RS;
 	}
@@ -3484,33 +3477,33 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_formulae(sheet) {
-	var y = &#x22;&#x22;, x, val=&#x22;&#x22;;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	var r = safe_decode_range(sheet[&#x27;!ref&#x27;]), rr = &#x22;&#x22;, cols = [], C;
+	var y = "", x, val="";
+	if(sheet == null || sheet["!ref"] == null) return [];
+	var r = safe_decode_range(sheet['!ref']), rr = "", cols = [], C;
 	var cmds = new Array((r.e.r-r.s.r+1)*(r.e.c-r.s.c+1));
 	var i = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(var R = r.s.r; R &#x3c;= r.e.r; ++R) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(var R = r.s.r; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			y = cols[C] + rr;
 			x = sheet[y];
-			val = &#x22;&#x22;;
+			val = "";
 			if(x === undefined) continue;
 			else if(x.F != null) {
 				y = x.F;
 				if(!x.f) continue;
 				val = x.f;
-				if(y.indexOf(&#x22;:&#x22;) == -1) y = y + &#x22;:&#x22; + y;
+				if(y.indexOf(":") == -1) y = y + ":" + y;
 			}
 			if(x.f != null) val = x.f;
-			else if(x.t == &#x27;n&#x27; &#x26;&#x26; x.v != null) val = &#x22;&#x22; + x.v;
-			else if(x.t == &#x27;b&#x27;) val = x.v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-			else if(x.w !== undefined) val = &#x22;&#x27;&#x22; + x.w;
+			else if(x.t == 'n' &amp;&amp; x.v != null) val = "" + x.v;
+			else if(x.t == 'b') val = x.v ? "TRUE" : "FALSE";
+			else if(x.w !== undefined) val = "'" + x.w;
 			else if(x.v === undefined) continue;
-			else if(x.t == &#x27;s&#x27;) val = &#x22;&#x27;&#x22; + x.v;
-			else val = &#x22;&#x22;+x.v;
-			cmds[i++] = y + &#x22;=&#x22; + val;
+			else if(x.t == 's') val = "'" + x.v;
+			else val = ""+x.v;
+			cmds[i++] = y + "=" + val;
 		}
 	}
 	cmds.length = i;
@@ -3532,22 +3525,22 @@ return s; }</pre></li>
 	var val, row, range, header = 0, offset = 1, r, hdr = [], isempty, R, C, v;
 	var o = opts != null ? opts : {};
 	var raw = o.raw;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	range = o.range !== undefined ? o.range : sheet[&#x22;!ref&#x22;];
+	if(sheet == null || sheet["!ref"] == null) return [];
+	range = o.range !== undefined ? o.range : sheet["!ref"];
 	if(o.header === 1) header = 1;
-	else if(o.header === &#x22;A&#x22;) header = 2;
+	else if(o.header === "A") header = 2;
 	else if(Array.isArray(o.header)) header = 3;
 	switch(typeof range) {
-		case &#x27;string&#x27;: r = safe_decode_range(range); break;
-		case &#x27;number&#x27;: r = safe_decode_range(sheet[&#x22;!ref&#x22;]); r.s.r = range; break;
+		case 'string': r = safe_decode_range(range); break;
+		case 'number': r = safe_decode_range(sheet["!ref"]); r.s.r = range; break;
 		default: r = range;
 	}
-	if(header &#x3e; 0) offset = 0;
+	if(header &gt; 0) offset = 0;
 	var rr = encode_row(r.s.r);
 	var cols = new Array(r.e.c-r.s.c+1);
 	var out = new Array(r.e.r-r.s.r-offset+1);
 	var outi = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) {
 		cols[C] = encode_col(C);
 		val = sheet[cols[C] + rr];
 		switch(header) {
@@ -3560,24 +3553,24 @@ return s; }</pre></li>
 		}
 	}
 
-	for (R = r.s.r + offset; R &#x3c;= r.e.r; ++R) {
+	for (R = r.s.r + offset; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
 		isempty = true;
 		if(header === 1) row = [];
 		else {
 			row = {};
-			if(Object.defineProperty) Object.defineProperty(row, &#x27;__rowNum__&#x27;, {value:R, enumerable:false});
+			if(Object.defineProperty) Object.defineProperty(row, '__rowNum__', {value:R, enumerable:false});
 			else row.__rowNum__ = R;
 		}
-		for (C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for (C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
 			if(val === undefined || val.t === undefined) continue;
 			v = val.v;
 			switch(val.t){
-				case &#x27;e&#x27;: continue;
-				case &#x27;s&#x27;: break;
-				case &#x27;b&#x27;: case &#x27;n&#x27;: break;
-				default: throw &#x27;unrecognized type &#x27; + val.t;
+				case 'e': continue;
+				case 's': break;
+				case 'b': case 'n': break;
+				default: throw 'unrecognized type ' + val.t;
 			}
 			if(v !== undefined) {
 				row[hdr[C]] = raw ? v : format_cell(val,v);
@@ -3602,25 +3595,25 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_csv(sheet, opts) {
-	var out = &#x22;&#x22;, txt = &#x22;&#x22;, qreg = /&#x22;/g;
+	var out = "", txt = "", qreg = /"/g;
 	var o = opts == null ? {} : opts;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return &#x22;&#x22;;
-	var r = safe_decode_range(sheet[&#x22;!ref&#x22;]);
-	var FS = o.FS !== undefined ? o.FS : &#x22;,&#x22;, fs = FS.charCodeAt(0);
-	var RS = o.RS !== undefined ? o.RS : &#x22;\n&#x22;, rs = RS.charCodeAt(0);
-	var row = &#x22;&#x22;, rr = &#x22;&#x22;, cols = [];
+	if(sheet == null || sheet["!ref"] == null) return "";
+	var r = safe_decode_range(sheet["!ref"]);
+	var FS = o.FS !== undefined ? o.FS : ",", fs = FS.charCodeAt(0);
+	var RS = o.RS !== undefined ? o.RS : "\n", rs = RS.charCodeAt(0);
+	var row = "", rr = "", cols = [];
 	var i = 0, cc = 0, val;
 	var R = 0, C = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(R = r.s.r; R &#x3c;= r.e.r; ++R) {
-		row = &#x22;&#x22;;
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(R = r.s.r; R &lt;= r.e.r; ++R) {
+		row = "";
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
-			txt = val !== undefined ? &#x27;&#x27;+format_cell(val) : &#x22;&#x22;;
+			txt = val !== undefined ? ''+format_cell(val) : "";
 			for(i = 0, cc = 0; i !== txt.length; ++i) if((cc = txt.charCodeAt(i)) === fs || cc === rs || cc === 34) {
-				txt = &#x22;\&#x22;&#x22; + txt.replace(qreg, &#x27;&#x22;&#x22;&#x27;) + &#x22;\&#x22;&#x22;; break; }
-			row += (C === r.s.c ? &#x22;&#x22; : FS) + txt;
+				txt = "\"" + txt.replace(qreg, '""') + "\""; break; }
+			row += (C === r.s.c ? "" : FS) + txt;
 		}
 		out += row + RS;
 	}
@@ -3639,33 +3632,33 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_formulae(sheet) {
-	var y = &#x22;&#x22;, x, val=&#x22;&#x22;;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	var r = safe_decode_range(sheet[&#x27;!ref&#x27;]), rr = &#x22;&#x22;, cols = [], C;
+	var y = "", x, val="";
+	if(sheet == null || sheet["!ref"] == null) return [];
+	var r = safe_decode_range(sheet['!ref']), rr = "", cols = [], C;
 	var cmds = new Array((r.e.r-r.s.r+1)*(r.e.c-r.s.c+1));
 	var i = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(var R = r.s.r; R &#x3c;= r.e.r; ++R) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(var R = r.s.r; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			y = cols[C] + rr;
 			x = sheet[y];
-			val = &#x22;&#x22;;
+			val = "";
 			if(x === undefined) continue;
 			else if(x.F != null) {
 				y = x.F;
 				if(!x.f) continue;
 				val = x.f;
-				if(y.indexOf(&#x22;:&#x22;) == -1) y = y + &#x22;:&#x22; + y;
+				if(y.indexOf(":") == -1) y = y + ":" + y;
 			}
 			if(x.f != null) val = x.f;
-			else if(x.t == &#x27;n&#x27; &#x26;&#x26; x.v != null) val = &#x22;&#x22; + x.v;
-			else if(x.t == &#x27;b&#x27;) val = x.v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-			else if(x.w !== undefined) val = &#x22;&#x27;&#x22; + x.w;
+			else if(x.t == 'n' &amp;&amp; x.v != null) val = "" + x.v;
+			else if(x.t == 'b') val = x.v ? "TRUE" : "FALSE";
+			else if(x.w !== undefined) val = "'" + x.w;
 			else if(x.v === undefined) continue;
-			else if(x.t == &#x27;s&#x27;) val = &#x22;&#x27;&#x22; + x.v;
-			else val = &#x22;&#x22;+x.v;
-			cmds[i++] = y + &#x22;=&#x22; + val;
+			else if(x.t == 's') val = "'" + x.v;
+			else val = ""+x.v;
+			cmds[i++] = y + "=" + val;
 		}
 	}
 	cmds.length = i;
@@ -3687,22 +3680,22 @@ return s; }</pre></li>
 	var val, row, range, header = 0, offset = 1, r, hdr = [], isempty, R, C, v;
 	var o = opts != null ? opts : {};
 	var raw = o.raw;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	range = o.range !== undefined ? o.range : sheet[&#x22;!ref&#x22;];
+	if(sheet == null || sheet["!ref"] == null) return [];
+	range = o.range !== undefined ? o.range : sheet["!ref"];
 	if(o.header === 1) header = 1;
-	else if(o.header === &#x22;A&#x22;) header = 2;
+	else if(o.header === "A") header = 2;
 	else if(Array.isArray(o.header)) header = 3;
 	switch(typeof range) {
-		case &#x27;string&#x27;: r = safe_decode_range(range); break;
-		case &#x27;number&#x27;: r = safe_decode_range(sheet[&#x22;!ref&#x22;]); r.s.r = range; break;
+		case 'string': r = safe_decode_range(range); break;
+		case 'number': r = safe_decode_range(sheet["!ref"]); r.s.r = range; break;
 		default: r = range;
 	}
-	if(header &#x3e; 0) offset = 0;
+	if(header &gt; 0) offset = 0;
 	var rr = encode_row(r.s.r);
 	var cols = new Array(r.e.c-r.s.c+1);
 	var out = new Array(r.e.r-r.s.r-offset+1);
 	var outi = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) {
 		cols[C] = encode_col(C);
 		val = sheet[cols[C] + rr];
 		switch(header) {
@@ -3715,24 +3708,24 @@ return s; }</pre></li>
 		}
 	}
 
-	for (R = r.s.r + offset; R &#x3c;= r.e.r; ++R) {
+	for (R = r.s.r + offset; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
 		isempty = true;
 		if(header === 1) row = [];
 		else {
 			row = {};
-			if(Object.defineProperty) Object.defineProperty(row, &#x27;__rowNum__&#x27;, {value:R, enumerable:false});
+			if(Object.defineProperty) Object.defineProperty(row, '__rowNum__', {value:R, enumerable:false});
 			else row.__rowNum__ = R;
 		}
-		for (C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for (C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
 			if(val === undefined || val.t === undefined) continue;
 			v = val.v;
 			switch(val.t){
-				case &#x27;e&#x27;: continue;
-				case &#x27;s&#x27;: break;
-				case &#x27;b&#x27;: case &#x27;n&#x27;: break;
-				default: throw &#x27;unrecognized type &#x27; + val.t;
+				case 'e': continue;
+				case 's': break;
+				case 'b': case 'n': break;
+				default: throw 'unrecognized type ' + val.t;
 			}
 			if(v !== undefined) {
 				row[hdr[C]] = raw ? v : format_cell(val,v);
@@ -3769,7 +3762,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function split_cell(cstr) { return cstr.replace(/(\$?[A-Z]*)(\$?\d*)/,&#x22;$1,$2&#x22;).split(&#x22;,&#x22;); }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function split_cell(cstr) { return cstr.replace(/(\$?[A-Z]*)(\$?\d*)/,"$1,$2").split(","); }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -3824,7 +3817,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function decode_range(range) { var x =range.split(&#x22;:&#x22;).map(decode_cell); return {s:x[0],e:x[x.length-1]}; }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function decode_range(range) { var x =range.split(":").map(decode_cell); return {s:x[0],e:x[x.length-1]}; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -3878,7 +3871,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function encode_col(col) { var s=&#x22;&#x22;; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s;
+    <li>description and source-code<pre class="apidocCodePre">function encode_col(col) { var s=""; for(++col; col; col=Math.floor((col-1)/26)) s = String.fromCharCode(((col-1)%26) + 65) + s;
 return s; }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -3898,9 +3891,9 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function encode_range(cs, ce) {
-	if(ce === undefined || typeof ce === &#x27;number&#x27;) return encode_range(cs.s, cs.e);
-	if(typeof cs !== &#x27;string&#x27;) cs = encode_cell(cs); if(typeof ce !== &#x27;string&#x27;) ce = encode_cell(ce);
-	return cs == ce ? cs : cs + &#x22;:&#x22; + ce;
+	if(ce === undefined || typeof ce === 'number') return encode_range(cs.s, cs.e);
+	if(typeof cs !== 'string') cs = encode_cell(cs); if(typeof ce !== 'string') ce = encode_cell(ce);
+	return cs == ce ? cs : cs + ":" + ce;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -3919,7 +3912,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function encode_row(row) { return &#x22;&#x22; + (row + 1); }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function encode_row(row) { return "" + (row + 1); }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -3938,7 +3931,7 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function format_cell(cell, v) {
-	if(cell == null || cell.t == null) return &#x22;&#x22;;
+	if(cell == null || cell.t == null) return "";
 	if(cell.w !== undefined) return cell.w;
 	if(v === undefined) return safe_format_cell(cell, cell.v);
 	return safe_format_cell(cell, v);
@@ -3961,33 +3954,33 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_formulae(sheet) {
-	var y = &#x22;&#x22;, x, val=&#x22;&#x22;;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	var r = safe_decode_range(sheet[&#x27;!ref&#x27;]), rr = &#x22;&#x22;, cols = [], C;
+	var y = "", x, val="";
+	if(sheet == null || sheet["!ref"] == null) return [];
+	var r = safe_decode_range(sheet['!ref']), rr = "", cols = [], C;
 	var cmds = new Array((r.e.r-r.s.r+1)*(r.e.c-r.s.c+1));
 	var i = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(var R = r.s.r; R &#x3c;= r.e.r; ++R) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(var R = r.s.r; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			y = cols[C] + rr;
 			x = sheet[y];
-			val = &#x22;&#x22;;
+			val = "";
 			if(x === undefined) continue;
 			else if(x.F != null) {
 				y = x.F;
 				if(!x.f) continue;
 				val = x.f;
-				if(y.indexOf(&#x22;:&#x22;) == -1) y = y + &#x22;:&#x22; + y;
+				if(y.indexOf(":") == -1) y = y + ":" + y;
 			}
 			if(x.f != null) val = x.f;
-			else if(x.t == &#x27;n&#x27; &#x26;&#x26; x.v != null) val = &#x22;&#x22; + x.v;
-			else if(x.t == &#x27;b&#x27;) val = x.v ? &#x22;TRUE&#x22; : &#x22;FALSE&#x22;;
-			else if(x.w !== undefined) val = &#x22;&#x27;&#x22; + x.w;
+			else if(x.t == 'n' &amp;&amp; x.v != null) val = "" + x.v;
+			else if(x.t == 'b') val = x.v ? "TRUE" : "FALSE";
+			else if(x.w !== undefined) val = "'" + x.w;
 			else if(x.v === undefined) continue;
-			else if(x.t == &#x27;s&#x27;) val = &#x22;&#x27;&#x22; + x.v;
-			else val = &#x22;&#x22;+x.v;
-			cmds[i++] = y + &#x22;=&#x22; + val;
+			else if(x.t == 's') val = "'" + x.v;
+			else val = ""+x.v;
+			cmds[i++] = y + "=" + val;
 		}
 	}
 	cmds.length = i;
@@ -4011,25 +4004,25 @@ return s; }</pre></li>
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sheet_to_csv(sheet, opts) {
-	var out = &#x22;&#x22;, txt = &#x22;&#x22;, qreg = /&#x22;/g;
+	var out = "", txt = "", qreg = /"/g;
 	var o = opts == null ? {} : opts;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return &#x22;&#x22;;
-	var r = safe_decode_range(sheet[&#x22;!ref&#x22;]);
-	var FS = o.FS !== undefined ? o.FS : &#x22;,&#x22;, fs = FS.charCodeAt(0);
-	var RS = o.RS !== undefined ? o.RS : &#x22;\n&#x22;, rs = RS.charCodeAt(0);
-	var row = &#x22;&#x22;, rr = &#x22;&#x22;, cols = [];
+	if(sheet == null || sheet["!ref"] == null) return "";
+	var r = safe_decode_range(sheet["!ref"]);
+	var FS = o.FS !== undefined ? o.FS : ",", fs = FS.charCodeAt(0);
+	var RS = o.RS !== undefined ? o.RS : "\n", rs = RS.charCodeAt(0);
+	var row = "", rr = "", cols = [];
 	var i = 0, cc = 0, val;
 	var R = 0, C = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) cols[C] = encode_col(C);
-	for(R = r.s.r; R &#x3c;= r.e.r; ++R) {
-		row = &#x22;&#x22;;
+	for(C = r.s.c; C &lt;= r.e.c; ++C) cols[C] = encode_col(C);
+	for(R = r.s.r; R &lt;= r.e.r; ++R) {
+		row = "";
 		rr = encode_row(R);
-		for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for(C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
-			txt = val !== undefined ? &#x27;&#x27;+format_cell(val) : &#x22;&#x22;;
+			txt = val !== undefined ? ''+format_cell(val) : "";
 			for(i = 0, cc = 0; i !== txt.length; ++i) if((cc = txt.charCodeAt(i)) === fs || cc === rs || cc === 34) {
-				txt = &#x22;\&#x22;&#x22; + txt.replace(qreg, &#x27;&#x22;&#x22;&#x27;) + &#x22;\&#x22;&#x22;; break; }
-			row += (C === r.s.c ? &#x22;&#x22; : FS) + txt;
+				txt = "\"" + txt.replace(qreg, '""') + "\""; break; }
+			row += (C === r.s.c ? "" : FS) + txt;
 		}
 		out += row + RS;
 	}
@@ -4056,22 +4049,22 @@ return s; }</pre></li>
 	var val, row, range, header = 0, offset = 1, r, hdr = [], isempty, R, C, v;
 	var o = opts != null ? opts : {};
 	var raw = o.raw;
-	if(sheet == null || sheet[&#x22;!ref&#x22;] == null) return [];
-	range = o.range !== undefined ? o.range : sheet[&#x22;!ref&#x22;];
+	if(sheet == null || sheet["!ref"] == null) return [];
+	range = o.range !== undefined ? o.range : sheet["!ref"];
 	if(o.header === 1) header = 1;
-	else if(o.header === &#x22;A&#x22;) header = 2;
+	else if(o.header === "A") header = 2;
 	else if(Array.isArray(o.header)) header = 3;
 	switch(typeof range) {
-		case &#x27;string&#x27;: r = safe_decode_range(range); break;
-		case &#x27;number&#x27;: r = safe_decode_range(sheet[&#x22;!ref&#x22;]); r.s.r = range; break;
+		case 'string': r = safe_decode_range(range); break;
+		case 'number': r = safe_decode_range(sheet["!ref"]); r.s.r = range; break;
 		default: r = range;
 	}
-	if(header &#x3e; 0) offset = 0;
+	if(header &gt; 0) offset = 0;
 	var rr = encode_row(r.s.r);
 	var cols = new Array(r.e.c-r.s.c+1);
 	var out = new Array(r.e.r-r.s.r-offset+1);
 	var outi = 0;
-	for(C = r.s.c; C &#x3c;= r.e.c; ++C) {
+	for(C = r.s.c; C &lt;= r.e.c; ++C) {
 		cols[C] = encode_col(C);
 		val = sheet[cols[C] + rr];
 		switch(header) {
@@ -4084,24 +4077,24 @@ return s; }</pre></li>
 		}
 	}
 
-	for (R = r.s.r + offset; R &#x3c;= r.e.r; ++R) {
+	for (R = r.s.r + offset; R &lt;= r.e.r; ++R) {
 		rr = encode_row(R);
 		isempty = true;
 		if(header === 1) row = [];
 		else {
 			row = {};
-			if(Object.defineProperty) Object.defineProperty(row, &#x27;__rowNum__&#x27;, {value:R, enumerable:false});
+			if(Object.defineProperty) Object.defineProperty(row, '__rowNum__', {value:R, enumerable:false});
 			else row.__rowNum__ = R;
 		}
-		for (C = r.s.c; C &#x3c;= r.e.c; ++C) {
+		for (C = r.s.c; C &lt;= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
 			if(val === undefined || val.t === undefined) continue;
 			v = val.v;
 			switch(val.t){
-				case &#x27;e&#x27;: continue;
-				case &#x27;s&#x27;: break;
-				case &#x27;b&#x27;: case &#x27;n&#x27;: break;
-				default: throw &#x27;unrecognized type &#x27; + val.t;
+				case 'e': continue;
+				case 's': break;
+				case 'b': case 'n': break;
+				default: throw 'unrecognized type ' + val.t;
 			}
 			if(v !== undefined) {
 				row[hdr[C]] = raw ? v : format_cell(val,v);
@@ -4148,7 +4141,7 @@ return s; }</pre></li>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function split_cell(cstr) { return cstr.replace(/(\$?[A-Z]*)(\$?\d*)/,&#x22;$1,$2&#x22;).split(&#x22;,&#x22;); }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">function split_cell(cstr) { return cstr.replace(/(\$?[A-Z]*)(\$?\d*)/,"$1,$2").split(","); }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
@@ -4161,3 +4154,4 @@ return s; }</pre></li>
     ]
 </div>
 </div>
+</body></html>
