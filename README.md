@@ -1,8 +1,8 @@
 # npmdoc-xlsjs
 
-api documentation for  [xlsjs (v0.7.6)](https://oss.sheetjs.com/js-xls/)  [![npm package](https://img.shields.io/npm/v/npmdoc-xlsjs.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-xlsjs) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-xlsjs.svg)](https://travis-ci.org/npmdoc/node-npmdoc-xlsjs)
+#### basic api documentation for  [xlsjs (v0.7.6)](https://oss.sheetjs.com/js-xls/)  [![npm package](https://img.shields.io/npm/v/npmdoc-xlsjs.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-xlsjs) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-xlsjs.svg)](https://travis-ci.org/npmdoc/node-npmdoc-xlsjs)
 
-Excel 5.0/95 and 97-2004 spreadsheet (BIFF5 XLS / BIFF8 XLS / XML 2003) parser
+#### Excel 5.0/95 and 97-2004 spreadsheet (BIFF5 XLS / BIFF8 XLS / XML 2003) parser
 
 [![NPM](https://nodei.co/npm/xlsjs.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/xlsjs)
 
