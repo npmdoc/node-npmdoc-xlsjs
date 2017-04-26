@@ -1,23 +1,23 @@
 <svg height="318" width="720" xmlns="http://www.w3.org/2000/svg">
 <rect height="318" fill="#555" width="720"></rect>
 <text fill="#7f7" font-family="Courier New" font-size="12" xml:space="preserve">
-<tspan x="10" y="26">  0.  2017-04-18 03:22:13 +0000  2550921 bytes  .</tspan>
-<tspan x="10" y="42">  1.  2017-04-18 03:22:13 +0000      588 bytes  LICENSE</tspan>
-<tspan x="10" y="58">  2.  2017-04-18 03:22:13 +0000    17861 bytes  README.md</tspan>
-<tspan x="10" y="74">  3.  2017-04-18 03:22:13 +0000     3684 bytes  bin/xls.njs</tspan>
-<tspan x="10" y="90">  4.  2017-04-18 03:22:13 +0000      294 bytes  bower.json</tspan>
-<tspan x="10" y="106">  5.  2017-04-18 03:22:13 +0000      588 bytes  dist/LICENSE</tspan>
-<tspan x="10" y="122">  6.  2017-04-18 03:22:13 +0000   387169 bytes  dist/cpexcel.js</tspan>
-<tspan x="10" y="138">  7.  2017-04-18 03:22:13 +0000   180262 bytes  dist/xls.core.min.js</tspan>
-<tspan x="10" y="154">  8.  2017-04-18 03:22:13 +0000   213494 bytes  dist/xls.core.min.map</tspan>
-<tspan x="10" y="170">  9.  2017-04-18 03:22:13 +0000   547154 bytes  dist/xls.full.min.js</tspan>
-<tspan x="10" y="186"> 10.  2017-04-18 03:22:13 +0000   308352 bytes  dist/xls.full.min.map</tspan>
-<tspan x="10" y="202"> 11.  2017-04-18 03:22:13 +0000   246753 bytes  dist/xls.js</tspan>
-<tspan x="10" y="218"> 12.  2017-04-18 03:22:13 +0000   180262 bytes  dist/xls.min.js</tspan>
-<tspan x="10" y="234"> 13.  2017-04-18 03:22:13 +0000   213489 bytes  dist/xls.min.map</tspan>
-<tspan x="10" y="250"> 14.  2017-04-18 03:22:13 +0000     2500 bytes  package.json</tspan>
-<tspan x="10" y="266"> 15.  2017-04-18 03:22:13 +0000   246753 bytes  xls.js</tspan>
-<tspan x="10" y="282"> 16.  2017-04-18 03:22:13 +0000      858 bytes  xlsworker1.js</tspan>
-<tspan x="10" y="298"> 17.  2017-04-18 03:22:13 +0000      860 bytes  xlsworker2.js</tspan>
+<tspan x="10" y="26">  0.  2017-04-26 05:26:13 +0000  2550921 bytes  .</tspan>
+<tspan x="10" y="42">  1.  2017-04-26 05:26:13 +0000      588 bytes  LICENSE</tspan>
+<tspan x="10" y="58">  2.  2017-04-26 05:26:13 +0000    17861 bytes  README.md</tspan>
+<tspan x="10" y="74">  3.  2017-04-26 05:26:13 +0000     3684 bytes  bin/xls.njs</tspan>
+<tspan x="10" y="90">  4.  2017-04-26 05:26:13 +0000      294 bytes  bower.json</tspan>
+<tspan x="10" y="106">  5.  2017-04-26 05:26:13 +0000      588 bytes  dist/LICENSE</tspan>
+<tspan x="10" y="122">  6.  2017-04-26 05:26:13 +0000   387169 bytes  dist/cpexcel.js</tspan>
+<tspan x="10" y="138">  7.  2017-04-26 05:26:13 +0000   180262 bytes  dist/xls.core.min.js</tspan>
+<tspan x="10" y="154">  8.  2017-04-26 05:26:13 +0000   213494 bytes  dist/xls.core.min.map</tspan>
+<tspan x="10" y="170">  9.  2017-04-26 05:26:13 +0000   547154 bytes  dist/xls.full.min.js</tspan>
+<tspan x="10" y="186"> 10.  2017-04-26 05:26:13 +0000   308352 bytes  dist/xls.full.min.map</tspan>
+<tspan x="10" y="202"> 11.  2017-04-26 05:26:13 +0000   246753 bytes  dist/xls.js</tspan>
+<tspan x="10" y="218"> 12.  2017-04-26 05:26:13 +0000   180262 bytes  dist/xls.min.js</tspan>
+<tspan x="10" y="234"> 13.  2017-04-26 05:26:13 +0000   213489 bytes  dist/xls.min.map</tspan>
+<tspan x="10" y="250"> 14.  2017-04-26 05:26:13 +0000     2500 bytes  package.json</tspan>
+<tspan x="10" y="266"> 15.  2017-04-26 05:26:13 +0000   246753 bytes  xls.js</tspan>
+<tspan x="10" y="282"> 16.  2017-04-26 05:26:13 +0000      858 bytes  xlsworker1.js</tspan>
+<tspan x="10" y="298"> 17.  2017-04-26 05:26:13 +0000      860 bytes  xlsworker2.js</tspan>
 </text>
 </svg>
